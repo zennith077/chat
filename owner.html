@@ -6,348 +6,200 @@
 <title>NexChat — Owner Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#06060f; --surface:#0d0d1c; --surface2:#131326; --surface3:#1a1a2e;
-    --border:#1c1c34; --accent:#7c5cfc; --accent2:#00e5ff;
-    --accent-glow:rgba(124,92,252,0.3); --text:#e8e8f0; --text-muted:#5a5a7a;
-    --user-bubble:linear-gradient(135deg,#7c5cfc,#5b3de8);
-    --owner-bubble:#131326; --danger:#ff4f6b; --success:#00c97d;
-  }
+  :root{--bg:#06060f;--surface:#0d0d1c;--surface2:#131326;--surface3:#1a1a2e;--border:#1c1c34;--accent:#7c5cfc;--accent2:#00e5ff;--accent-glow:rgba(124,92,252,0.3);--text:#e8e8f0;--text-muted:#5a5a7a;--user-bubble:linear-gradient(135deg,#7c5cfc,#5b3de8);--danger:#ff4f6b;--success:#00c97d;--warning:#ffb547;}
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;overflow:hidden;}
   body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;}
-  body::before{
-    content:'';position:fixed;inset:0;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events:none;z-index:0;
-  }
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
   /* TOPBAR */
-  .topbar{
-    display:flex;align-items:center;gap:16px;
-    padding:14px 20px;
-    background:rgba(13,13,28,0.97);
-    border-bottom:1px solid var(--border);
-    backdrop-filter:blur(20px);
-    position:relative;z-index:10;flex-shrink:0;
-  }
-  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;
-    background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .owner-label{
-    padding:5px 12px;border-radius:20px;
-    background:rgba(124,92,252,0.2);border:1px solid rgba(124,92,252,0.4);
-    font-size:12px;color:var(--accent);font-weight:700;
-  }
+  .topbar{display:flex;align-items:center;gap:16px;padding:14px 20px;background:rgba(13,13,28,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);position:relative;z-index:10;flex-shrink:0;}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .owner-label{padding:5px 12px;border-radius:20px;background:rgba(124,92,252,0.2);border:1px solid rgba(124,92,252,0.4);font-size:12px;color:var(--accent);font-weight:700;}
   .topbar-spacer{flex:1;}
   .status-live{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--success);}
-  .live-dot{width:7px;height:7px;background:var(--success);border-radius:50%;animation:livePulse 1.5s infinite;}
-  @keyframes livePulse{0%,100%{box-shadow:0 0 0 0 rgba(0,201,125,0.4)}50%{box-shadow:0 0 0 6px rgba(0,201,125,0)}}
-  .logout-btn{
-    padding:8px 14px;border-radius:10px;
-    background:var(--surface2);border:1px solid var(--border);
-    color:var(--text-muted);font-size:12px;cursor:pointer;transition:.2s;
-  }
+  .live-dot{width:7px;height:7px;background:var(--success);border-radius:50%;animation:lp 1.5s infinite;}
+  @keyframes lp{0%,100%{box-shadow:0 0 0 0 rgba(0,201,125,0.4)}50%{box-shadow:0 0 0 6px rgba(0,201,125,0)}}
+  .logout-btn{padding:8px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);font-size:12px;cursor:pointer;transition:.2s;}
   .logout-btn:hover{border-color:var(--danger);color:var(--danger);}
+
+  /* STATS BAR */
+  .stats-bar{display:flex;gap:12px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:9;overflow-x:auto;}
+  .stats-bar::-webkit-scrollbar{display:none;}
+  .stat-card{flex-shrink:0;padding:10px 18px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .stat-icon{font-size:20px;}
+  .stat-info{}
+  .stat-value{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;}
+  .stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
 
   /* LAYOUT */
   .layout{display:flex;flex:1;overflow:hidden;position:relative;z-index:1;}
 
   /* SIDEBAR */
-  .sidebar{
-    width:260px;flex-shrink:0;
-    background:var(--surface);
-    border-right:1px solid var(--border);
-    display:flex;flex-direction:column;
-    overflow:hidden;
-  }
-  .sidebar-header{
-    padding:14px 16px;border-bottom:1px solid var(--border);
-    font-family:'Syne',sans-serif;font-weight:700;font-size:13px;
-    color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;
-    display:flex;align-items:center;justify-content:space-between;
-  }
-  .user-count{
-    background:var(--accent);color:#fff;
-    border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;
-  }
-  .sidebar-search{
-    padding:10px 12px;border-bottom:1px solid var(--border);
-  }
-  .search-input{
-    width:100%;padding:8px 12px;border-radius:10px;
-    background:var(--surface2);border:1px solid var(--border);
-    color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;
-    outline:none;transition:.2s;
-  }
+  .sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+  .sidebar-header{padding:14px 16px;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;}
+  .user-count{background:var(--accent);color:#fff;border-radius:20px;padding:2px 8px;font-size:11px;font-weight:600;}
+  .sidebar-search{padding:10px 12px;border-bottom:1px solid var(--border);}
+  .search-input{width:100%;padding:8px 12px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:.2s;}
   .search-input:focus{border-color:var(--accent);}
   .user-list{flex:1;overflow-y:auto;}
   .user-list::-webkit-scrollbar{width:3px;}
   .user-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-  .user-item{
-    padding:12px 14px;display:flex;align-items:center;gap:10px;
-    cursor:pointer;transition:.15s;border-bottom:1px solid var(--border);
-    position:relative;
-  }
+  .user-item{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border);position:relative;}
   .user-item:hover{background:rgba(124,92,252,0.08);}
   .user-item.active{background:rgba(124,92,252,0.15);border-right:2px solid var(--accent);}
-  .user-avatar{
-    width:38px;height:38px;border-radius:11px;
-    background:var(--user-bubble);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Syne',sans-serif;font-weight:800;font-size:15px;
-    flex-shrink:0;
-  }
+  .user-avatar{width:38px;height:38px;border-radius:11px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;flex-shrink:0;position:relative;}
+  .vip-ring{box-shadow:0 0 0 2px #ffb547;}
+  .banned-ring{box-shadow:0 0 0 2px var(--danger);}
   .user-info{flex:1;min-width:0;}
-  .user-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .user-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px;}
+  .vip-tag{font-size:9px;background:linear-gradient(135deg,#ffb547,#ff8c00);color:#000;padding:1px 5px;border-radius:20px;font-weight:800;}
+  .ban-tag{font-size:9px;background:rgba(255,79,107,0.2);color:var(--danger);padding:1px 5px;border-radius:20px;font-weight:700;}
   .user-preview{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
   .user-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
   .user-time{font-size:10px;color:var(--text-muted);}
-  .unread-pill{
-    background:var(--accent);color:#fff;
-    border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;
-  }
+  .unread-pill{background:var(--accent);color:#fff;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;}
   .sidebar-empty{padding:32px 16px;text-align:center;color:var(--text-muted);font-size:13px;}
 
   /* CHAT PANEL */
   .chat-panel{flex:1;display:flex;flex-direction:column;min-width:0;}
-  .chat-header{
-    padding:14px 20px;background:rgba(13,13,28,0.97);
-    border-bottom:1px solid var(--border);
-    display:flex;align-items:center;gap:12px;flex-shrink:0;
-  }
-  .chat-user-avatar{
-    width:40px;height:40px;border-radius:12px;
-    background:var(--user-bubble);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Syne',sans-serif;font-weight:800;font-size:16px;
-  }
+  .chat-placeholder{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:var(--text-muted);}
+  .placeholder-icon{font-size:52px;}
+
+  .chat-header{padding:12px 20px;background:rgba(13,13,28,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+  .chat-user-avatar{width:40px;height:40px;border-radius:12px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;}
   .chat-user-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
   .chat-user-id{font-size:10px;color:var(--text-muted);margin-top:2px;}
-  .chat-placeholder{
-    flex:1;display:flex;align-items:center;justify-content:center;
-    flex-direction:column;gap:16px;color:var(--text-muted);
-  }
-  .placeholder-icon{font-size:52px;}
-  .placeholder-text{font-size:14px;}
+  .header-actions{margin-left:auto;display:flex;gap:8px;}
+  .hdr-btn{padding:7px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid;transition:.2s;}
+  .hdr-ban{background:rgba(255,79,107,0.12);color:var(--danger);border-color:rgba(255,79,107,0.3);}
+  .hdr-ban:hover{background:var(--danger);color:#fff;}
+  .hdr-unban{background:rgba(0,201,125,0.12);color:var(--success);border-color:rgba(0,201,125,0.3);}
+  .hdr-unban:hover{background:var(--success);color:#fff;}
+  .hdr-vip{background:rgba(255,181,71,0.12);color:var(--warning);border-color:rgba(255,181,71,0.3);}
+  .hdr-vip:hover{background:var(--warning);color:#000;}
+  .hdr-clear{background:rgba(255,79,107,0.08);color:var(--danger);border-color:rgba(255,79,107,0.2);}
+  .hdr-clear:hover{background:var(--danger);color:#fff;}
+
   .messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px;}
   .messages-area::-webkit-scrollbar{width:4px;}
   .messages-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+  /* TYPING */
+  .typing-bar{padding:4px 20px;font-size:12px;color:var(--accent);display:none;flex-shrink:0;align-items:center;gap:8px;}
+  .typing-bar.show{display:flex;}
+  .typing-dots span{display:inline-block;width:5px;height:5px;background:var(--accent);border-radius:50%;animation:tdot 1.2s infinite;}
+  .typing-dots span:nth-child(2){animation-delay:.2s;}
+  .typing-dots span:nth-child(3){animation-delay:.4s;}
+  @keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
   .message{display:flex;flex-direction:column;max-width:70%;animation:msgIn .25s ease;}
   @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
   .message.user{align-self:flex-start;align-items:flex-start;}
   .message.owner{align-self:flex-end;align-items:flex-end;}
-  .bubble{
-    padding:10px 14px;border-radius:16px;
-    font-size:14px;line-height:1.5;word-break:break-word;
-  }
-  .message.user .bubble{
-    background:var(--surface3);border:1px solid var(--border);
-    border-bottom-left-radius:4px;
-  }
-  .message.owner .bubble{
-    background:var(--user-bubble);
-    border-bottom-right-radius:4px;
-    box-shadow:0 4px 16px var(--accent-glow);
-  }
+  .bubble{padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;word-break:break-word;}
+  .message.user .bubble{background:var(--surface3);border:1px solid var(--border);border-bottom-left-radius:4px;}
+  .message.owner .bubble{background:var(--user-bubble);border-bottom-right-radius:4px;box-shadow:0 4px 16px var(--accent-glow);}
   .bubble img{max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer;}
-  .msg-time{font-size:10px;color:var(--text-muted);margin-top:3px;padding:0 4px;}
+  .msg-time{font-size:10px;color:var(--text-muted);margin-top:3px;padding:0 4px;display:flex;align-items:center;gap:5px;}
+  .msg-status{font-size:12px;}
+  .msg-status.sent{color:var(--text-muted);}
+  .msg-status.read{color:var(--accent2);}
   .sender-label{font-size:10px;color:var(--text-muted);margin-bottom:3px;padding:0 4px;}
   .date-sep{display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:11px;margin:4px 0;}
   .date-sep::before,.date-sep::after{content:'';flex:1;height:1px;background:var(--border);}
+  .reply-quote{background:rgba(255,255,255,0.05);border-left:3px solid var(--accent);border-radius:8px;padding:5px 10px;margin-bottom:6px;font-size:12px;color:var(--text-muted);}
+  .reply-quote .rq-author{color:var(--accent);font-weight:600;margin-bottom:2px;}
 
-  /* DELETE CONTROLS */
-  .message-wrap{position:relative;display:flex;flex-direction:column;}
-  .message.user .message-wrap{align-items:flex-start;}
-  .message.owner .message-wrap{align-items:flex-end;}
-  .msg-actions{
-    display:none;gap:5px;margin-top:4px;
-  }
+  /* MSG ACTIONS */
+  .msg-actions{display:none;gap:4px;margin-top:4px;}
   .message:hover .msg-actions{display:flex;}
-  .msg-action-btn{
-    padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600;
-    border:none;cursor:pointer;transition:.15s;
-  }
-  .del-btn{background:rgba(255,79,107,0.15);color:var(--danger);border:1px solid rgba(255,79,107,0.3);}
-  .del-btn:hover{background:var(--danger);color:#fff;}
+  .act-btn{padding:4px 10px;border-radius:8px;font-size:11px;border:none;cursor:pointer;transition:.15s;font-weight:600;}
+  .act-del{background:rgba(255,79,107,0.12);color:var(--danger);border:1px solid rgba(255,79,107,0.2);}
+  .act-del:hover{background:var(--danger);color:#fff;}
 
-  /* CLEAR CHAT BUTTON in header */
-  .clear-chat-btn{
-    margin-left:auto;
-    padding:7px 14px;border-radius:10px;
-    background:rgba(255,79,107,0.12);border:1px solid rgba(255,79,107,0.3);
-    color:var(--danger);font-size:12px;font-weight:600;cursor:pointer;transition:.2s;
-  }
-  .clear-chat-btn:hover{background:var(--danger);color:#fff;border-color:var(--danger);}
-
-  /* CONFIRM MODAL */
-  .modal-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.75);
-    display:flex;align-items:center;justify-content:center;
-    z-index:500;backdrop-filter:blur(6px);
-    opacity:0;pointer-events:none;transition:.2s;
-  }
-  .modal-overlay.open{opacity:1;pointer-events:all;}
-  .modal-box{
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:20px;padding:32px;width:340px;
-    display:flex;flex-direction:column;gap:16px;
-    box-shadow:0 0 60px rgba(0,0,0,0.5);
-    transform:scale(0.92);transition:.2s;
-  }
-  .modal-overlay.open .modal-box{transform:scale(1);}
-  .modal-icon{font-size:40px;text-align:center;}
-  .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;text-align:center;}
-  .modal-desc{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.6;}
-  .modal-btns{display:flex;gap:10px;}
-  .modal-cancel{
-    flex:1;padding:11px;border-radius:12px;
-    background:var(--surface2);border:1px solid var(--border);
-    color:var(--text-muted);font-size:14px;cursor:pointer;transition:.2s;
-  }
-  .modal-cancel:hover{border-color:var(--text-muted);color:var(--text);}
-  .modal-confirm{
-    flex:1;padding:11px;border-radius:12px;
-    background:rgba(255,79,107,0.2);border:1px solid rgba(255,79,107,0.4);
-    color:var(--danger);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;
-  }
-  .modal-confirm:hover{background:var(--danger);color:#fff;border-color:var(--danger);}
-
-  /* REPLY INPUT */
-  .reply-area{
-    padding:12px 16px 16px;
-    background:rgba(13,13,28,0.97);border-top:1px solid var(--border);flex-shrink:0;
-  }
+  /* REPLY AREA */
+  .reply-area{padding:12px 16px 16px;background:rgba(13,13,28,0.97);border-top:1px solid var(--border);flex-shrink:0;}
   .reply-row{display:flex;gap:10px;align-items:flex-end;}
-  .reply-input{
-    flex:1;padding:12px 16px;border-radius:14px;
-    background:var(--surface2);border:1px solid var(--border);
-    color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
-    resize:none;outline:none;transition:.2s;max-height:120px;min-height:44px;
-  }
+  .reply-input{flex:1;padding:12px 16px;border-radius:14px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;transition:.2s;max-height:120px;min-height:44px;}
   .reply-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
   .reply-input::placeholder{color:var(--text-muted);}
-  .send-btn{
-    width:44px;height:44px;border-radius:12px;
-    background:var(--user-bubble);border:none;color:#fff;
-    cursor:pointer;display:flex;align-items:center;justify-content:center;
-    font-size:18px;transition:.2s;flex-shrink:0;
-    box-shadow:0 4px 16px var(--accent-glow);
-  }
+  .send-btn{width:44px;height:44px;border-radius:12px;background:var(--user-bubble);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:.2s;flex-shrink:0;box-shadow:0 4px 16px var(--accent-glow);}
   .send-btn:hover{transform:scale(1.05);}
   .send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
   /* RIGHT PANEL */
-  .right-panel{
-    width:280px;flex-shrink:0;
-    background:var(--surface);border-left:1px solid var(--border);
-    display:flex;flex-direction:column;overflow:hidden;
-  }
+  .right-panel{width:290px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
   .panel-tabs{display:flex;border-bottom:1px solid var(--border);}
-  .panel-tab{
-    flex:1;padding:14px;text-align:center;
-    font-size:12px;font-weight:600;cursor:pointer;
-    color:var(--text-muted);transition:.2s;border-bottom:2px solid transparent;
-  }
+  .panel-tab{flex:1;padding:12px 6px;text-align:center;font-size:11px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:.2s;border-bottom:2px solid transparent;}
   .panel-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
   .panel-content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
   .panel-content::-webkit-scrollbar{width:3px;}
   .panel-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-  /* MAILBOX FORM */
+  /* FORM */
   .form-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
-  .form-input,.form-textarea{
-    width:100%;padding:10px 14px;border-radius:12px;
-    background:var(--surface2);border:1px solid var(--border);
-    color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;
-    outline:none;transition:.2s;
-  }
-  .form-textarea{resize:vertical;min-height:100px;}
+  .form-input,.form-textarea{width:100%;padding:10px 14px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:.2s;}
+  .form-textarea{resize:vertical;min-height:90px;}
   .form-input:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow);}
   .form-group{display:flex;flex-direction:column;}
-  .submit-btn{
-    padding:12px;border-radius:12px;
-    background:var(--user-bubble);border:none;
-    color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
-    cursor:pointer;transition:.2s;box-shadow:0 4px 16px var(--accent-glow);
-    width:100%;
-  }
-  .submit-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px var(--accent-glow);}
+  .submit-btn{padding:12px;border-radius:12px;background:var(--user-bubble);border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 4px 16px var(--accent-glow);width:100%;}
+  .submit-btn:hover{transform:translateY(-1px);}
   .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-  .success-msg{
-    padding:10px 14px;border-radius:10px;
-    background:rgba(0,201,125,0.15);border:1px solid rgba(0,201,125,0.3);
-    color:var(--success);font-size:13px;text-align:center;display:none;
-  }
-  .success-msg.show{display:block;animation:fadeIn .3s ease;}
-  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .success-msg{padding:10px 14px;border-radius:10px;background:rgba(0,201,125,0.15);border:1px solid rgba(0,201,125,0.3);color:var(--success);font-size:13px;text-align:center;display:none;}
+  .success-msg.show{display:block;}
 
-  /* COMMANDS PANEL */
-  .cmd-card{
-    background:var(--surface2);border:1px solid var(--border);
-    border-radius:14px;padding:14px;
-  }
+  /* BROADCAST */
+  .broadcast-section{border-top:1px solid var(--border);padding-top:12px;margin-top:4px;}
+  .broadcast-label{font-size:11px;color:var(--warning);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .broadcast-btn{padding:12px;border-radius:12px;background:rgba(255,181,71,0.15);border:1px solid rgba(255,181,71,0.3);color:var(--warning);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:.2s;width:100%;}
+  .broadcast-btn:hover{background:var(--warning);color:#000;}
+
+  /* CMD CARDS */
+  .cmd-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;}
   .cmd-name{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:14px;margin-bottom:6px;}
   .cmd-resp{font-size:12px;color:var(--text-muted);line-height:1.5;}
-  .add-cmd-btn{
-    padding:10px;border-radius:12px;border:1px dashed var(--border);
-    background:transparent;color:var(--text-muted);
-    cursor:pointer;font-size:13px;transition:.2s;width:100%;
-  }
-  .add-cmd-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-  /* LOGIN */
-  .login-overlay{
-    position:fixed;inset:0;background:var(--bg);
-    display:flex;align-items:center;justify-content:center;
-    z-index:999;flex-direction:column;gap:24px;
-  }
-  .login-card{
-    background:var(--surface);border:1px solid var(--border);
-    border-radius:20px;padding:40px;width:360px;
-    display:flex;flex-direction:column;gap:16px;
-    box-shadow:0 0 60px rgba(124,92,252,0.1);
-  }
-  .login-title{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;text-align:center;}
-  .login-input{
-    padding:12px 16px;border-radius:12px;
-    background:var(--surface2);border:1px solid var(--border);
-    color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
-    outline:none;width:100%;transition:.2s;
-  }
-  .login-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
-  .login-btn{
-    padding:12px;border-radius:12px;background:var(--user-bubble);
-    border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;
-    cursor:pointer;transition:.2s;box-shadow:0 4px 20px var(--accent-glow);
-  }
-  .login-btn:hover{transform:translateY(-1px);}
-  .login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;text-align:center;
-    background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .login-err{color:var(--danger);font-size:12px;text-align:center;display:none;}
-  .login-sub{text-align:center;color:var(--text-muted);font-size:13px;}
-  .owner-badge-login{
-    text-align:center;padding:8px 16px;border-radius:8px;
-    background:rgba(255,79,107,0.15);border:1px solid rgba(255,79,107,0.3);
-    color:var(--danger);font-size:12px;font-weight:600;
-  }
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:.2s;}
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;width:340px;display:flex;flex-direction:column;gap:16px;box-shadow:0 0 60px rgba(0,0,0,.5);transform:scale(.92);transition:.2s;}
+  .modal-overlay.open .modal-box{transform:scale(1);}
+  .modal-icon{font-size:40px;text-align:center;}
+  .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;text-align:center;}
+  .modal-desc{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.6;}
+  .modal-btns{display:flex;gap:10px;}
+  .modal-cancel{flex:1;padding:11px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);font-size:14px;cursor:pointer;transition:.2s;}
+  .modal-cancel:hover{color:var(--text);}
+  .modal-confirm{flex:1;padding:11px;border-radius:12px;background:rgba(255,79,107,0.2);border:1px solid rgba(255,79,107,0.4);color:var(--danger);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;}
+  .modal-confirm:hover{background:var(--danger);color:#fff;}
+  .modal-confirm.safe{background:rgba(0,201,125,0.2);border-color:rgba(0,201,125,0.4);color:var(--success);}
+  .modal-confirm.safe:hover{background:var(--success);color:#fff;}
 
   /* LIGHTBOX */
-  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;
-    align-items:center;justify-content:center;z-index:999;cursor:zoom-out;}
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:999;cursor:zoom-out;}
   .lightbox.open{display:flex;}
   .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;}
 
   /* TOAST */
-  .toast{
-    position:fixed;bottom:20px;right:20px;
-    background:var(--surface2);border:1px solid var(--border);
-    padding:10px 18px;border-radius:14px;font-size:13px;z-index:100;
-    opacity:0;pointer-events:none;transition:.3s;
-  }
+  .toast{position:fixed;bottom:20px;right:20px;background:var(--surface2);border:1px solid var(--border);padding:10px 18px;border-radius:14px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:.3s;}
   .toast.show{opacity:1;}
 
+  /* LOGIN */
+  .login-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:24px;}
+  .login-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:360px;display:flex;flex-direction:column;gap:16px;box-shadow:0 0 60px rgba(124,92,252,.1);}
+  .login-title{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;text-align:center;}
+  .login-input{padding:12px 16px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;width:100%;transition:.2s;}
+  .login-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+  .login-btn{padding:12px;border-radius:12px;background:var(--user-bubble);border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:.2s;box-shadow:0 4px 20px var(--accent-glow);}
+  .login-btn:hover{transform:translateY(-1px);}
+  .login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;text-align:center;background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .login-err{color:var(--danger);font-size:12px;text-align:center;display:none;}
+  .login-sub{text-align:center;color:var(--text-muted);font-size:13px;}
+  .owner-warn{text-align:center;padding:8px 16px;border-radius:8px;background:rgba(255,79,107,.15);border:1px solid rgba(255,79,107,.3);color:var(--danger);font-size:12px;font-weight:600;}
+
   @media(max-width:900px){.right-panel{display:none;}}
-  @media(max-width:600px){.sidebar{width:220px;}.topbar .status-live{display:none;}}
+  @media(max-width:600px){.sidebar{width:220px;}.stats-bar{display:none;}}
 </style>
 </head>
 <body>
@@ -357,8 +209,8 @@
   <div class="login-logo">NexChat</div>
   <div class="login-card">
     <div class="login-title">🔐 Owner Login</div>
-    <div class="owner-badge-login">⚠️ Akses Khusus Owner / Admin</div>
-    <div class="login-sub">Login dengan akun Owner untuk mengakses dashboard</div>
+    <div class="owner-warn">⚠️ Akses Khusus Owner / Admin</div>
+    <div class="login-sub">Login dengan akun Owner untuk akses dashboard</div>
     <input class="login-input" id="loginEmail" type="email" placeholder="Email Owner">
     <input class="login-input" id="loginPass" type="password" placeholder="Password">
     <div class="login-err" id="loginErr"></div>
@@ -371,8 +223,17 @@
   <div class="logo">NexChat</div>
   <div class="owner-label">👑 OWNER</div>
   <div class="topbar-spacer"></div>
-  <div class="status-live"><div class="live-dot"></div>Live Dashboard</div>
+  <div class="status-live"><div class="live-dot"></div>Live</div>
   <button class="logout-btn" id="logoutBtn">Keluar</button>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value" id="statUsers">0</div><div class="stat-label">Total User</div></div></div>
+  <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-info"><div class="stat-value" id="statMsgs">0</div><div class="stat-label">Total Pesan</div></div></div>
+  <div class="stat-card"><div class="stat-icon">📬</div><div class="stat-info"><div class="stat-value" id="statMails">0</div><div class="stat-label">Mailbox Terkirim</div></div></div>
+  <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value" id="statVip">0</div><div class="stat-label">User VIP</div></div></div>
+  <div class="stat-card"><div class="stat-icon">🚫</div><div class="stat-info"><div class="stat-value" id="statBanned">0</div><div class="stat-label">User Banned</div></div></div>
 </div>
 
 <!-- LAYOUT -->
@@ -380,23 +241,18 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-header">
-      Users
-      <span class="user-count" id="userCount">0</span>
-    </div>
+    <div class="sidebar-header">Users <span class="user-count" id="userCount">0</span></div>
     <div class="sidebar-search">
       <input class="search-input" id="searchInput" placeholder="Cari user..." oninput="filterUsers()">
     </div>
-    <div class="user-list" id="userList">
-      <div class="sidebar-empty">Menunggu user...</div>
-    </div>
+    <div class="user-list" id="userList"><div class="sidebar-empty">Menunggu user...</div></div>
   </div>
 
   <!-- CHAT PANEL -->
   <div class="chat-panel">
     <div id="chatPlaceholder" class="chat-placeholder">
       <div class="placeholder-icon">💬</div>
-      <div class="placeholder-text">Pilih user dari sidebar untuk mulai chat</div>
+      <div style="font-size:14px;color:var(--text-muted)">Pilih user untuk mulai chat</div>
     </div>
 
     <div id="chatHeader" class="chat-header" style="display:none">
@@ -405,11 +261,11 @@
         <div class="chat-user-name" id="chatName">-</div>
         <div class="chat-user-id" id="chatUid">-</div>
       </div>
-      <button class="clear-chat-btn" onclick="confirmClearChat()">🗑️ Hapus Semua Chat</button>
+      <div class="header-actions" id="headerActions"></div>
     </div>
 
     <div class="messages-area" id="messagesArea" style="display:none"></div>
-
+    <div class="typing-bar" id="typingBar"><div class="typing-dots"><span></span><span></span><span></span></div> User sedang mengetik...</div>
     <div class="reply-area" id="replyArea" style="display:none">
       <div class="reply-row">
         <textarea class="reply-input" id="replyInput" placeholder="Balas pesan..." rows="1"></textarea>
@@ -422,65 +278,56 @@
   <div class="right-panel">
     <div class="panel-tabs">
       <div class="panel-tab active" onclick="switchTab('mailbox',this)">📨 Mailbox</div>
-      <div class="panel-tab" onclick="switchTab('commands',this)">⚡ Commands</div>
+      <div class="panel-tab" onclick="switchTab('broadcast',this)">📢 Broadcast</div>
+      <div class="panel-tab" onclick="switchTab('commands',this)">⚡ CMD</div>
     </div>
 
-    <!-- MAILBOX TAB -->
+    <!-- MAILBOX -->
     <div class="panel-content" id="tabMailbox">
-      <div class="form-group">
-        <div class="form-label">Judul Surat</div>
-        <input class="form-input" id="mailTitle" placeholder="Subjek pesan...">
-      </div>
-      <div class="form-group">
-        <div class="form-label">Isi Pesan</div>
-        <textarea class="form-textarea" id="mailContent" placeholder="Tulis pesan untuk user..."></textarea>
-      </div>
-      <div class="form-group">
-        <div class="form-label">Link (opsional)</div>
-        <input class="form-input" id="mailLink" placeholder="https://...">
-      </div>
-      <button class="submit-btn" id="sendMailBtn" onclick="sendMailbox()">📨 Kirim ke Mailbox User</button>
-      <div class="success-msg" id="mailSuccess">✅ Surat berhasil dikirim!</div>
+      <div class="form-group"><div class="form-label">Judul Surat</div><input class="form-input" id="mailTitle" placeholder="Subjek..."></div>
+      <div class="form-group"><div class="form-label">Isi Pesan</div><textarea class="form-textarea" id="mailContent" placeholder="Tulis pesan..."></textarea></div>
+      <div class="form-group"><div class="form-label">Link (opsional)</div><input class="form-input" id="mailLink" placeholder="https://..."></div>
+      <button class="submit-btn" id="sendMailBtn" onclick="sendMailbox()">📨 Kirim ke User</button>
+      <div class="success-msg" id="mailSuccess">✅ Surat terkirim!</div>
     </div>
 
-    <!-- COMMANDS TAB -->
+    <!-- BROADCAST -->
+    <div class="panel-content" id="tabBroadcast" style="display:none">
+      <div style="font-size:13px;color:var(--warning);background:rgba(255,181,71,0.1);border:1px solid rgba(255,181,71,0.2);border-radius:10px;padding:10px 14px;">⚠️ Broadcast akan dikirim ke SEMUA user yang terdaftar.</div>
+      <div class="form-group"><div class="form-label">Judul Broadcast</div><input class="form-input" id="bcTitle" placeholder="Judul pengumuman..."></div>
+      <div class="form-group"><div class="form-label">Isi Pesan</div><textarea class="form-textarea" id="bcContent" placeholder="Isi pengumuman untuk semua user..."></textarea></div>
+      <div class="form-group"><div class="form-label">Link (opsional)</div><input class="form-input" id="bcLink" placeholder="https://..."></div>
+      <button class="broadcast-btn" id="bcBtn" onclick="sendBroadcast()">📢 Kirim ke Semua User</button>
+      <div class="success-msg" id="bcSuccess">✅ Broadcast terkirim!</div>
+    </div>
+
+    <!-- COMMANDS -->
     <div class="panel-content" id="tabCommands" style="display:none">
       <div id="cmdList"></div>
       <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div class="form-group" style="margin-bottom:10px">
-          <div class="form-label">Nama Command (tanpa /)</div>
-          <input class="form-input" id="newCmdName" placeholder="pay, done, reff...">
-        </div>
-        <div class="form-group" style="margin-bottom:10px">
-          <div class="form-label">Respons Otomatis</div>
-          <textarea class="form-textarea" id="newCmdResp" placeholder="Pesan yang dikirim saat command digunakan..." style="min-height:70px"></textarea>
-        </div>
+        <div class="form-group" style="margin-bottom:10px"><div class="form-label">Nama Command</div><input class="form-input" id="newCmdName" placeholder="pay, done, reff..."></div>
+        <div class="form-group" style="margin-bottom:10px"><div class="form-label">Respons</div><textarea class="form-textarea" id="newCmdResp" placeholder="Pesan balasan..." style="min-height:70px"></textarea></div>
         <button class="submit-btn" onclick="addCommand()">➕ Tambah Command</button>
-        <div class="success-msg" id="cmdSuccess">✅ Command ditambahkan!</div>
+        <div class="success-msg" id="cmdSuccess" style="margin-top:10px">✅ Command ditambahkan!</div>
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- CONFIRM MODAL -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-box">
-    <div class="modal-icon" id="modalIcon">🗑️</div>
-    <div class="modal-title" id="modalTitle">Konfirmasi Hapus</div>
-    <div class="modal-desc" id="modalDesc">Yakin ingin menghapus?</div>
+    <div class="modal-icon" id="modalIcon">⚠️</div>
+    <div class="modal-title" id="modalTitle">Konfirmasi</div>
+    <div class="modal-desc" id="modalDesc">Yakin?</div>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Batal</button>
-      <button class="modal-confirm" id="modalConfirmBtn">Hapus</button>
+      <button class="modal-confirm" id="modalConfirmBtn">Konfirmasi</button>
     </div>
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="document.getElementById('lightbox').classList.remove('open')">
-  <img id="lightboxImg" src="">
-</div>
-
+<div class="lightbox" id="lightbox" onclick="document.getElementById('lightbox').classList.remove('open')"><img id="lightboxImg" src=""></div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -491,375 +338,427 @@ const SUPABASE_KEY = "sb_publishable_7BIpp44f-1f0GWcftvS8Lg_CCXPHYG7"
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-let ownerId   = null
-let users     = {}      // uid → { uid, name, lastMsg, lastTime, unread }
-let activeUid = null
-let msgChannel = null
-let allMsgChannel = null
-let searchQ = ''
+let ownerId = null, activeUid = null
+let users = {}, profiles = {}
+let msgChannel = null, allMsgChannel = null
+let searchQ = '', pendingAction = null
+let typingTimeout = null
+let typingSent = false
 
-// ── UTILS ─────────────────────────────────────────────────────
+const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+const fmtTime = ts => { const d=new Date(ts),n=new Date(); return d.toDateString()===n.toDateString()?d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('id-ID',{day:'numeric',month:'short'}) }
+const scrollBottom = () => { const a=document.getElementById('messagesArea'); a.scrollTop=a.scrollHeight }
+const autoResize = el => { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px' }
+
 function showToast(msg) {
-  const t = document.getElementById('toast')
-  t.textContent = msg; t.classList.add('show')
-  setTimeout(() => t.classList.remove('show'), 2500)
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),2500)
 }
-function esc(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-}
-function fmtTime(ts) {
-  const d = new Date(ts)
-  const now = new Date()
-  return d.toDateString() === now.toDateString()
-    ? d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})
-    : d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})
-}
-function scrollBottom() {
-  const a = document.getElementById('messagesArea'); a.scrollTop = a.scrollHeight
-}
-function autoResize(el) {
-  el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'
+function showSuccess(id) {
+  const el=document.getElementById(id); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000)
 }
 
-// ── AUTH ─────────────────────────────────────────────────────
+// ── MODAL ──────────────────────────────────────────────────────
+function openModal({icon,title,desc,confirmLabel,safe,onConfirm}) {
+  document.getElementById('modalIcon').textContent=icon||'⚠️'
+  document.getElementById('modalTitle').textContent=title
+  document.getElementById('modalDesc').textContent=desc
+  const btn=document.getElementById('modalConfirmBtn')
+  btn.textContent=confirmLabel||'Konfirmasi'
+  btn.className='modal-confirm'+(safe?' safe':'')
+  pendingAction=onConfirm
+  document.getElementById('confirmModal').classList.add('open')
+}
+window.closeModal = () => { document.getElementById('confirmModal').classList.remove('open'); pendingAction=null }
+document.getElementById('modalConfirmBtn').onclick = async () => { if(pendingAction) await pendingAction(); closeModal() }
+document.getElementById('confirmModal').addEventListener('click', e => { if(e.target===document.getElementById('confirmModal')) closeModal() })
+
+// ── AUTH ───────────────────────────────────────────────────────
 async function init() {
-  const { data:{session} } = await supabase.auth.getSession()
+  const {data:{session}} = await supabase.auth.getSession()
   if (session) {
     ownerId = session.user.id
-    document.getElementById('loginOverlay').style.display = 'none'
+    // Role guard: cek apakah user ini adalah owner
+    const {data:prof} = await supabase.from('profiles').select('role').eq('id',ownerId).maybeSingle()
+    if (prof && prof.role !== 'owner') {
+      document.getElementById('loginOverlay').style.display='flex'
+      document.getElementById('loginErr').textContent='Akun ini bukan Owner.'
+      document.getElementById('loginErr').style.display='block'
+      await supabase.auth.signOut(); return
+    }
+    document.getElementById('loginOverlay').style.display='none'
     startApp()
   }
 }
 
 document.getElementById('loginBtn').onclick = async () => {
-  const email = document.getElementById('loginEmail').value.trim()
-  const pass  = document.getElementById('loginPass').value
-  const err   = document.getElementById('loginErr')
-  err.style.display = 'none'
-  if (!email||!pass) { err.textContent='Isi semua field';err.style.display='block';return }
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
-  if (error) { err.textContent=error.message;err.style.display='block';return }
-  ownerId = data.user.id
-  document.getElementById('loginOverlay').style.display = 'none'
+  const email=document.getElementById('loginEmail').value.trim()
+  const pass=document.getElementById('loginPass').value
+  const err=document.getElementById('loginErr'); err.style.display='none'
+  if (!email||!pass){err.textContent='Isi semua field';err.style.display='block';return}
+  const {data,error}=await supabase.auth.signInWithPassword({email,password:pass})
+  if (error){err.textContent=error.message;err.style.display='block';return}
+  // Cek role
+  const {data:prof}=await supabase.from('profiles').select('role').eq('id',data.user.id).maybeSingle()
+  if (!prof || prof.role !== 'owner') {
+    err.textContent='Akun ini bukan Owner. Akses ditolak.'
+    err.style.display='block'
+    await supabase.auth.signOut(); return
+  }
+  ownerId=data.user.id
+  document.getElementById('loginOverlay').style.display='none'
   startApp()
 }
 
-document.getElementById('logoutBtn').onclick = async () => {
-  await supabase.auth.signOut(); location.reload()
-}
+document.getElementById('logoutBtn').onclick = async () => { await supabase.auth.signOut(); location.reload() }
 
-// ── START ─────────────────────────────────────────────────────
+// ── START ──────────────────────────────────────────────────────
 async function startApp() {
+  await loadStats()
   await loadAllMessages()
+  await loadProfiles()
   subscribeAllMessages()
+  subscribeTypingAll()
   await loadCommands()
 }
 
-// ── LOAD ALL MESSAGES (build user list) ───────────────────────
-async function loadAllMessages() {
-  const { data } = await supabase
-    .from('messages')
-    .select('*')
-    .order('created_at', { ascending: false })
+// ── STATS ──────────────────────────────────────────────────────
+async function loadStats() {
+  const [msgs, mails, profs] = await Promise.all([
+    supabase.from('messages').select('id',{count:'exact',head:true}),
+    supabase.from('mailbox').select('id',{count:'exact',head:true}),
+    supabase.from('profiles').select('id,vip,banned')
+  ])
+  document.getElementById('statMsgs').textContent = msgs.count||0
+  document.getElementById('statMails').textContent = mails.count||0
+  const p = profs.data||[]
+  document.getElementById('statVip').textContent = p.filter(x=>x.vip).length
+  document.getElementById('statBanned').textContent = p.filter(x=>x.banned).length
+}
 
-  ;(data || []).forEach(m => trackUser(m))
+// ── LOAD PROFILES ──────────────────────────────────────────────
+async function loadProfiles() {
+  const {data} = await supabase.from('profiles').select('*')
+  ;(data||[]).forEach(p => { profiles[p.id]=p })
+  document.getElementById('statUsers').textContent = Object.keys(users).length
+  renderUserList()
+}
+
+// ── LOAD ALL MESSAGES ──────────────────────────────────────────
+async function loadAllMessages() {
+  const {data} = await supabase.from('messages').select('*').order('created_at',{ascending:false})
+  ;(data||[]).forEach(m => trackUser(m))
   renderUserList()
 }
 
 function trackUser(m) {
   if (!users[m.user_id]) {
-    users[m.user_id] = {
-      uid: m.user_id,
-      name: 'User ' + m.user_id.substring(0,8),
-      lastMsg: m.content || '[Gambar]',
-      lastTime: m.created_at,
-      unread: 0
-    }
+    users[m.user_id]={uid:m.user_id,name:'User '+m.user_id.substring(0,8),lastMsg:m.content||'[Gambar]',lastTime:m.created_at,unread:0}
   } else {
-    const u = users[m.user_id]
-    if (new Date(m.created_at) > new Date(u.lastTime)) {
-      u.lastMsg  = m.content || '[Gambar]'
-      u.lastTime = m.created_at
-    }
+    const u=users[m.user_id]
+    if (new Date(m.created_at)>new Date(u.lastTime)){u.lastMsg=m.content||'[Gambar]';u.lastTime=m.created_at}
   }
-  if (m.sender === 'user' && m.user_id !== activeUid) {
-    users[m.user_id].unread = (users[m.user_id].unread || 0) + 1
-  }
+  if (m.sender==='user'&&m.user_id!==activeUid) users[m.user_id].unread=(users[m.user_id].unread||0)+1
 }
 
-// ── RENDER USER LIST ──────────────────────────────────────────
+// ── RENDER USER LIST ───────────────────────────────────────────
 function renderUserList() {
-  const list = document.getElementById('userList')
-  const arr  = Object.values(users).filter(u =>
-    !searchQ || u.name.toLowerCase().includes(searchQ) || u.uid.includes(searchQ)
-  ).sort((a,b) => new Date(b.lastTime) - new Date(a.lastTime))
-
-  document.getElementById('userCount').textContent = arr.length
-
-  if (!arr.length) { list.innerHTML='<div class="sidebar-empty">Belum ada user</div>'; return }
-
-  list.innerHTML = ''
-  arr.forEach(u => {
-    const div = document.createElement('div')
-    div.className = 'user-item' + (u.uid === activeUid ? ' active' : '')
-    div.onclick = () => openChat(u.uid)
-    div.innerHTML = `
-      <div class="user-avatar">${u.name[0].toUpperCase()}</div>
+  const list=document.getElementById('userList')
+  const arr=Object.values(users).filter(u=>!searchQ||u.name.toLowerCase().includes(searchQ)||u.uid.includes(searchQ)).sort((a,b)=>new Date(b.lastTime)-new Date(a.lastTime))
+  document.getElementById('userCount').textContent=arr.length
+  document.getElementById('statUsers').textContent=arr.length
+  if (!arr.length){list.innerHTML='<div class="sidebar-empty">Belum ada user</div>';return}
+  list.innerHTML=''
+  arr.forEach(u=>{
+    const prof=profiles[u.uid]||{}
+    const div=document.createElement('div')
+    div.className='user-item'+(u.uid===activeUid?' active':'')
+    div.onclick=()=>openChat(u.uid)
+    const avatarClass=prof.vip?'user-avatar vip-ring':prof.banned?'user-avatar banned-ring':'user-avatar'
+    div.innerHTML=`
+      <div class="${avatarClass}">${u.name[0].toUpperCase()}</div>
       <div class="user-info">
-        <div class="user-name">${esc(u.name)}</div>
+        <div class="user-name">${esc(u.name)}
+          ${prof.vip?'<span class="vip-tag">VIP</span>':''}
+          ${prof.banned?'<span class="ban-tag">BAN</span>':''}
+        </div>
         <div class="user-preview">${esc(u.lastMsg)}</div>
       </div>
       <div class="user-meta">
         <div class="user-time">${fmtTime(u.lastTime)}</div>
-        ${u.unread > 0 ? `<div class="unread-pill">${u.unread}</div>` : ''}
-      </div>
-    `
+        ${u.unread>0?`<div class="unread-pill">${u.unread}</div>`:''}
+      </div>`
     list.appendChild(div)
   })
 }
 
-window.filterUsers = function() {
-  searchQ = document.getElementById('searchInput').value.toLowerCase()
-  renderUserList()
-}
+window.filterUsers = () => { searchQ=document.getElementById('searchInput').value.toLowerCase(); renderUserList() }
 
-// ── OPEN CHAT ─────────────────────────────────────────────────
+// ── OPEN CHAT ──────────────────────────────────────────────────
 async function openChat(uid) {
-  activeUid = uid
-  if (users[uid]) users[uid].unread = 0
-  renderUserList()
-
-  // Show UI
-  document.getElementById('chatPlaceholder').style.display = 'none'
-  document.getElementById('chatHeader').style.display = 'flex'
-  document.getElementById('messagesArea').style.display = 'flex'
-  document.getElementById('replyArea').style.display = 'block'
-
-  document.getElementById('chatAvatar').textContent = (users[uid]?.name||'U')[0].toUpperCase()
-  document.getElementById('chatName').textContent   = users[uid]?.name || uid
-  document.getElementById('chatUid').textContent    = 'ID: ' + uid
-
+  activeUid=uid; if (users[uid]) users[uid].unread=0; renderUserList()
+  document.getElementById('chatPlaceholder').style.display='none'
+  document.getElementById('chatHeader').style.display='flex'
+  document.getElementById('messagesArea').style.display='flex'
+  document.getElementById('replyArea').style.display='block'
+  document.getElementById('chatAvatar').textContent=(users[uid]?.name||'U')[0].toUpperCase()
+  document.getElementById('chatName').textContent=users[uid]?.name||uid
+  document.getElementById('chatUid').textContent='ID: '+uid
+  renderHeaderActions(uid)
   await loadChat(uid)
-
-  // Unsubscribe old
   if (msgChannel) await supabase.removeChannel(msgChannel)
-  msgChannel = supabase.channel('owner-chat-' + uid)
-    .on('postgres_changes', {
-      event: 'INSERT', schema: 'public', table: 'messages',
-      filter: `user_id=eq.${uid}`
-    }, payload => {
-      if (!document.getElementById('msg-' + payload.new.id)) {
-        renderMessage(payload.new)
-        scrollBottom()
-      }
+  msgChannel=supabase.channel('owner-chat-'+uid)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`user_id=eq.${uid}`},p=>{
+      if (!document.getElementById('msg-'+p.new.id)){renderMessage(p.new);scrollBottom()}
+    })
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:`user_id=eq.${uid}`},p=>{
+      const st=document.getElementById('st-'+p.new.id)
+      if (st){st.className='msg-status '+(p.new.status==='read'?'read':'sent');st.textContent=p.new.status==='read'?'✓✓':'✓'}
     })
     .subscribe()
+  // Mark as read
+  await supabase.from('messages').update({status:'read'}).eq('user_id',uid).eq('sender','user').neq('status','read')
+}
+
+function renderHeaderActions(uid) {
+  const prof=profiles[uid]||{}
+  const div=document.getElementById('headerActions')
+  div.innerHTML=`
+    ${prof.banned
+      ?`<button class="hdr-btn hdr-unban" onclick="toggleBan('${uid}',false)">✅ Unban</button>`
+      :`<button class="hdr-btn hdr-ban" onclick="toggleBan('${uid}',true)">🚫 Ban</button>`
+    }
+    ${prof.vip
+      ?`<button class="hdr-btn hdr-vip" onclick="toggleVip('${uid}',false)">⭐ Lepas VIP</button>`
+      :`<button class="hdr-btn hdr-vip" onclick="toggleVip('${uid}',true)">⭐ Set VIP</button>`
+    }
+    <button class="hdr-btn hdr-clear" onclick="confirmClearChat()">🗑️ Hapus Chat</button>`
 }
 
 async function loadChat(uid) {
-  const { data } = await supabase
-    .from('messages')
-    .select('*')
-    .eq('user_id', uid)
-    .order('created_at', { ascending: true })
-
-  const area = document.getElementById('messagesArea')
-  area.innerHTML = '<div class="date-sep">Riwayat Chat</div>'
-  ;(data||[]).forEach(m => renderMessage(m))
-  scrollBottom()
+  const {data}=await supabase.from('messages').select('*').eq('user_id',uid).order('created_at',{ascending:true})
+  const area=document.getElementById('messagesArea'); area.innerHTML='<div class="date-sep">Riwayat Chat</div>'
+  ;(data||[]).forEach(m=>renderMessage(m)); scrollBottom()
 }
 
 function renderMessage(msg) {
-  const area = document.getElementById('messagesArea')
-  const div  = document.createElement('div')
-  div.className = 'message ' + (msg.sender === 'owner' ? 'owner' : 'user')
-  div.id = 'msg-' + msg.id
-
-  let inner = `<div class="sender-label">${msg.sender === 'owner' ? 'Owner (kamu)' : 'User'}</div>`
-  inner += `<div class="message-wrap">`
-  inner += `<div class="bubble">`
-  if (msg.image_url) inner += `<img src="${msg.image_url}" onclick="openLb('${msg.image_url}')" loading="lazy">`
-  if (msg.content) inner += esc(msg.content)
-  inner += `</div>`
-  inner += `<div class="msg-actions">
-    <button class="msg-action-btn del-btn" onclick="confirmDeleteMsg('${msg.id}')">🗑 Hapus</button>
-  </div>`
-  inner += `</div>`
-  inner += `<div class="msg-time">${fmtTime(msg.created_at)}</div>`
-  div.innerHTML = inner
-  area.appendChild(div)
+  const area=document.getElementById('messagesArea')
+  const ex=document.getElementById('msg-'+msg.id); if (ex) return
+  const div=document.createElement('div')
+  div.className='message '+(msg.sender==='owner'?'owner':'user')
+  div.id='msg-'+msg.id
+  let h=`<div class="sender-label">${msg.sender==='owner'?'Owner (kamu)':'User'}</div>`
+  if (msg.reply_to_content) h+=`<div class="reply-quote"><div class="rq-author">${msg.reply_to_sender==='owner'?'Owner':'User'}</div><div>${esc(msg.reply_to_content)}</div></div>`
+  h+=`<div class="bubble">`
+  if (msg.image_url) h+=`<img src="${msg.image_url}" onclick="openLb('${msg.image_url}')" loading="lazy">`
+  if (msg.content) h+=esc(msg.content)
+  h+=`</div>`
+  h+=`<div class="msg-time">${fmtTime(msg.created_at)}`
+  if (msg.sender==='owner'){
+    const s=msg.status==='read'?'read':'sent'
+    h+=` <span class="msg-status ${s}" id="st-${msg.id}">${msg.status==='read'?'✓✓':'✓'}</span>`
+  }
+  h+=`</div>`
+  h+=`<div class="msg-actions"><button class="act-btn act-del" onclick="confirmDelMsg('${msg.id}')">🗑 Hapus</button></div>`
+  div.innerHTML=h; area.appendChild(div)
 }
 
-// ── MODAL ─────────────────────────────────────────────────────
-let pendingAction = null
-
-function openModal({ icon, title, desc, onConfirm }) {
-  document.getElementById('modalIcon').textContent  = icon
-  document.getElementById('modalTitle').textContent = title
-  document.getElementById('modalDesc').textContent  = desc
-  pendingAction = onConfirm
-  document.getElementById('confirmModal').classList.add('open')
+// ── SUBSCRIBE ALL ──────────────────────────────────────────────
+function subscribeAllMessages() {
+  allMsgChannel=supabase.channel('owner-all')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},p=>{
+      const m=p.new
+      if (!users[m.user_id]) users[m.user_id]={uid:m.user_id,name:'User '+m.user_id.substring(0,8),lastMsg:m.content||'[Gambar]',lastTime:m.created_at,unread:0}
+      const u=users[m.user_id]; u.lastMsg=m.content||'[Gambar]'; u.lastTime=m.created_at
+      if (m.sender==='user'&&m.user_id!==activeUid){
+        u.unread=(u.unread||0)+1
+        showToast('📨 Pesan baru dari '+u.name)
+        if (Notification.permission==='granted') new Notification(u.name,{body:m.content||'[Gambar]'})
+      }
+      renderUserList()
+      // Update stats
+      const cur=parseInt(document.getElementById('statMsgs').textContent)||0
+      document.getElementById('statMsgs').textContent=cur+1
+    }).subscribe()
+  Notification.requestPermission()
 }
 
-window.closeModal = function() {
-  document.getElementById('confirmModal').classList.remove('open')
-  pendingAction = null
+function subscribeTypingAll() {
+  // Listen for typing from active user
+  supabase.channel('typing-all-owner').on('broadcast',{event:'typing'},p=>{
+    if (p.payload?.sender==='user'&&p.payload?.userId===activeUid){
+      document.getElementById('typingBar').classList.add('show')
+      clearTimeout(typingTimeout)
+      typingTimeout=setTimeout(()=>document.getElementById('typingBar').classList.remove('show'),3000)
+    }
+  }).subscribe()
 }
 
-document.getElementById('modalConfirmBtn').onclick = async () => {
-  if (pendingAction) await pendingAction()
-  closeModal()
+// ── SEND REPLY ─────────────────────────────────────────────────
+window.sendReply = async () => {
+  if (!activeUid) return
+  const input=document.getElementById('replyInput'), text=input.value.trim()
+  if (!text) return
+  document.getElementById('replyBtn').disabled=true
+  await supabase.from('messages').insert({user_id:activeUid,sender:'owner',content:text,status:'sent',edited:false})
+  // Send typing broadcast
+  if (!typingSent){
+    typingSent=true
+    await supabase.channel('typing-'+activeUid).send({type:'broadcast',event:'typing',payload:{sender:'owner'}})
+    setTimeout(()=>typingSent=false,2000)
+  }
+  input.value=''; input.style.height='auto'
+  document.getElementById('replyBtn').disabled=false
 }
-
-// Close on overlay click
-document.getElementById('confirmModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('confirmModal')) closeModal()
+document.getElementById('replyInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply()}})
+document.getElementById('replyInput').addEventListener('input',e=>{
+  autoResize(e.target)
+  // Broadcast typing
+  if (!typingSent&&activeUid){
+    typingSent=true
+    supabase.channel('typing-'+activeUid).send({type:'broadcast',event:'typing',payload:{sender:'owner'}})
+    setTimeout(()=>typingSent=false,2000)
+  }
 })
 
-// ── HAPUS 1 PESAN ─────────────────────────────────────────────
-window.confirmDeleteMsg = function(msgId) {
+// ── BAN / VIP ──────────────────────────────────────────────────
+window.toggleBan = (uid, ban) => {
   openModal({
-    icon: '🗑️',
-    title: 'Hapus Pesan',
-    desc: 'Pesan ini akan dihapus permanen dari database. Tidak bisa dibatalkan.',
+    icon: ban?'🚫':'✅',
+    title: ban?'Ban User':'Unban User',
+    desc: ban?'User tidak bisa lagi mengakses chat & mailbox.':'User bisa kembali mengakses platform.',
+    confirmLabel: ban?'Ban':'Unban',
+    safe: !ban,
     onConfirm: async () => {
-      const { error } = await supabase.from('messages').delete().eq('id', msgId)
-      if (error) { showToast('Gagal hapus: ' + error.message); return }
-      const el = document.getElementById('msg-' + msgId)
-      if (el) { el.style.opacity='0'; el.style.transform='scale(0.9)'; el.style.transition='.2s'; setTimeout(()=>el.remove(),200) }
+      await supabase.from('profiles').upsert({id:uid,banned:ban},{onConflict:'id'})
+      if (!profiles[uid]) profiles[uid]={}; profiles[uid].banned=ban
+      renderHeaderActions(uid); renderUserList()
+      showToast(ban?'🚫 User dibanned':'✅ User di-unban')
+      // Update stats
+      loadStats()
+    }
+  })
+}
+
+window.toggleVip = (uid, vip) => {
+  openModal({
+    icon:'⭐',
+    title: vip?'Set VIP':'Lepas VIP',
+    desc: vip?'User akan mendapat status VIP.':'Status VIP user akan dicabut.',
+    confirmLabel: vip?'Set VIP':'Lepas VIP',
+    safe: true,
+    onConfirm: async () => {
+      await supabase.from('profiles').upsert({id:uid,vip},{onConflict:'id'})
+      if (!profiles[uid]) profiles[uid]={}; profiles[uid].vip=vip
+      renderHeaderActions(uid); renderUserList()
+      showToast(vip?'⭐ VIP diberikan':'VIP dicabut')
+      loadStats()
+    }
+  })
+}
+
+// ── DELETE MSG ─────────────────────────────────────────────────
+window.confirmDelMsg = id => {
+  openModal({icon:'🗑️',title:'Hapus Pesan',desc:'Pesan dihapus permanen dari database.',confirmLabel:'Hapus',
+    onConfirm: async () => {
+      await supabase.from('messages').delete().eq('id',id)
+      const el=document.getElementById('msg-'+id)
+      if (el){el.style.opacity='0';el.style.transition='.2s';setTimeout(()=>el.remove(),200)}
       showToast('✅ Pesan dihapus')
     }
   })
 }
 
-// ── HAPUS SEMUA CHAT USER ─────────────────────────────────────
-window.confirmClearChat = function() {
+window.confirmClearChat = () => {
   if (!activeUid) return
-  const name = users[activeUid]?.name || activeUid
-  openModal({
-    icon: '⚠️',
-    title: 'Hapus Semua Chat',
-    desc: `Semua pesan dari ${name} (kedua sisi: user & owner) akan dihapus permanen dari database.`,
+  openModal({icon:'⚠️',title:'Hapus Semua Chat',desc:`Semua pesan user ini akan dihapus permanen.`,confirmLabel:'Hapus Semua',
     onConfirm: async () => {
-      const { error } = await supabase.from('messages').delete().eq('user_id', activeUid)
-      if (error) { showToast('Gagal: ' + error.message); return }
-      const area = document.getElementById('messagesArea')
-      area.innerHTML = '<div class="date-sep">Chat telah dihapus</div>'
+      await supabase.from('messages').delete().eq('user_id',activeUid)
+      document.getElementById('messagesArea').innerHTML='<div class="date-sep">Chat telah dihapus</div>'
       showToast('✅ Semua chat dihapus')
     }
   })
 }
 
-window.openLb = url => {
-  document.getElementById('lightboxImg').src = url
-  document.getElementById('lightbox').classList.add('open')
+// ── MAILBOX ────────────────────────────────────────────────────
+window.sendMailbox = async () => {
+  if (!activeUid){showToast('Pilih user terlebih dahulu');return}
+  const title=document.getElementById('mailTitle').value.trim()
+  const content=document.getElementById('mailContent').value.trim()
+  const link=document.getElementById('mailLink').value.trim()
+  if (!title||!content){showToast('Isi judul dan pesan');return}
+  const btn=document.getElementById('sendMailBtn'); btn.disabled=true
+  const {error}=await supabase.from('mailbox').insert({user_id:activeUid,title,content,link:link||null})
+  btn.disabled=false
+  if (error){showToast('Gagal: '+error.message);return}
+  document.getElementById('mailTitle').value=''
+  document.getElementById('mailContent').value=''
+  document.getElementById('mailLink').value=''
+  showSuccess('mailSuccess')
+  const cur=parseInt(document.getElementById('statMails').textContent)||0
+  document.getElementById('statMails').textContent=cur+1
 }
 
-// ── REALTIME ALL MESSAGES ─────────────────────────────────────
-function subscribeAllMessages() {
-  allMsgChannel = supabase.channel('owner-all')
-    .on('postgres_changes', {
-      event: 'INSERT', schema: 'public', table: 'messages'
-    }, payload => {
-      const m = payload.new
-      if (!users[m.user_id]) {
-        users[m.user_id] = {
-          uid: m.user_id,
-          name: 'User ' + m.user_id.substring(0,8),
-          lastMsg: m.content || '[Gambar]',
-          lastTime: m.created_at,
-          unread: 0
-        }
+// ── BROADCAST ──────────────────────────────────────────────────
+window.sendBroadcast = async () => {
+  const title=document.getElementById('bcTitle').value.trim()
+  const content=document.getElementById('bcContent').value.trim()
+  const link=document.getElementById('bcLink').value.trim()
+  if (!title||!content){showToast('Isi judul dan pesan broadcast');return}
+  const uids=Object.keys(users)
+  if (!uids.length){showToast('Belum ada user');return}
+  openModal({
+    icon:'📢', title:'Kirim Broadcast',
+    desc:`Pesan akan dikirim ke ${uids.length} user. Lanjutkan?`,
+    confirmLabel:'Kirim Sekarang', safe:true,
+    onConfirm: async () => {
+      const btn=document.getElementById('bcBtn'); btn.disabled=true; btn.textContent='Mengirim...'
+      const rows=uids.map(uid=>({user_id:uid,title,content,link:link||null}))
+      // Insert in batches of 50
+      for (let i=0;i<rows.length;i+=50){
+        await supabase.from('mailbox').insert(rows.slice(i,i+50))
       }
-      const u = users[m.user_id]
-      u.lastMsg = m.content || '[Gambar]'
-      u.lastTime = m.created_at
-      if (m.sender === 'user' && m.user_id !== activeUid) {
-        u.unread = (u.unread||0)+1
-        showToast('📨 Pesan baru dari ' + u.name)
-        if (Notification.permission==='granted') new Notification(u.name,{body:m.content||'[Gambar]'})
-      }
-      renderUserList()
-    })
-    .subscribe()
-  Notification.requestPermission()
-}
-
-// ── SEND REPLY ────────────────────────────────────────────────
-window.sendReply = async function() {
-  if (!activeUid) return
-  const input = document.getElementById('replyInput')
-  const text  = input.value.trim()
-  if (!text) return
-  const btn = document.getElementById('replyBtn')
-  btn.disabled = true
-  const { error } = await supabase.from('messages').insert({
-    user_id: activeUid, sender: 'owner', content: text
+      btn.disabled=false; btn.textContent='📢 Kirim ke Semua User'
+      document.getElementById('bcTitle').value=''
+      document.getElementById('bcContent').value=''
+      document.getElementById('bcLink').value=''
+      showSuccess('bcSuccess')
+      showToast(`✅ Broadcast terkirim ke ${uids.length} user`)
+    }
   })
-  if (error) showToast('Gagal: ' + error.message)
-  input.value = ''; input.style.height='auto'
-  btn.disabled = false
 }
 
-document.getElementById('replyInput').addEventListener('keydown', e => {
-  if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply()}
-})
-document.getElementById('replyInput').addEventListener('input', e => autoResize(e.target))
-
-// ── SEND MAILBOX ───────────────────────────────────────────────
-window.sendMailbox = async function() {
-  if (!activeUid) { showToast('Pilih user terlebih dahulu'); return }
-  const title   = document.getElementById('mailTitle').value.trim()
-  const content = document.getElementById('mailContent').value.trim()
-  const link    = document.getElementById('mailLink').value.trim()
-  if (!title||!content) { showToast('Isi judul dan isi surat'); return }
-  const btn = document.getElementById('sendMailBtn')
-  btn.disabled = true
-  const { error } = await supabase.from('mailbox').insert({
-    user_id: activeUid, title, content, link: link || null
-  })
-  btn.disabled = false
-  if (error) { showToast('Gagal: ' + error.message); return }
-  document.getElementById('mailTitle').value = ''
-  document.getElementById('mailContent').value = ''
-  document.getElementById('mailLink').value = ''
-  const s = document.getElementById('mailSuccess')
-  s.classList.add('show'); setTimeout(()=>s.classList.remove('show'),3000)
-}
-
-// ── COMMANDS ─────────────────────────────────────────────────
+// ── COMMANDS ───────────────────────────────────────────────────
 async function loadCommands() {
-  const { data } = await supabase.from('commands').select('*')
-  const list = document.getElementById('cmdList')
-  list.innerHTML = ''
-  ;(data||[]).forEach(c => {
-    const div = document.createElement('div')
-    div.className = 'cmd-card'
-    div.innerHTML = `<div class="cmd-name">/${esc(c.command)}</div><div class="cmd-resp">${esc(c.response)}</div>`
+  const {data}=await supabase.from('commands').select('*')
+  const list=document.getElementById('cmdList'); list.innerHTML=''
+  ;(data||[]).forEach(c=>{
+    const div=document.createElement('div'); div.className='cmd-card'
+    div.innerHTML=`<div class="cmd-name">/${esc(c.command)}</div><div class="cmd-resp">${esc(c.response)}</div>`
     list.appendChild(div)
   })
 }
 
-window.addCommand = async function() {
-  const name = document.getElementById('newCmdName').value.trim()
-  const resp = document.getElementById('newCmdResp').value.trim()
-  if (!name||!resp) { showToast('Isi nama dan respons command'); return }
-  const { error } = await supabase.from('commands').upsert({ command: name, response: resp }, { onConflict: 'command' })
-  if (error) { showToast('Gagal: ' + error.message); return }
-  document.getElementById('newCmdName').value = ''
-  document.getElementById('newCmdResp').value = ''
-  const s = document.getElementById('cmdSuccess')
-  s.classList.add('show'); setTimeout(()=>s.classList.remove('show'),2500)
-  loadCommands()
+window.addCommand = async () => {
+  const name=document.getElementById('newCmdName').value.trim()
+  const resp=document.getElementById('newCmdResp').value.trim()
+  if (!name||!resp){showToast('Isi nama dan respons');return}
+  const {error}=await supabase.from('commands').upsert({command:name,response:resp},{onConflict:'command'})
+  if (error){showToast('Gagal: '+error.message);return}
+  document.getElementById('newCmdName').value=''
+  document.getElementById('newCmdResp').value=''
+  showSuccess('cmdSuccess'); loadCommands()
 }
 
-// ── TABS ─────────────────────────────────────────────────────
-window.switchTab = function(tab, el) {
-  document.querySelectorAll('.panel-tab').forEach(t=>t.classList.remove('active'))
-  el.classList.add('active')
-  document.getElementById('tabMailbox').style.display = tab==='mailbox' ? 'flex' : 'none'
-  document.getElementById('tabCommands').style.display = tab==='commands' ? 'flex' : 'none'
+// ── TABS ───────────────────────────────────────────────────────
+window.switchTab = (tab, el) => {
+  document.querySelectorAll('.panel-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active')
+  document.getElementById('tabMailbox').style.display=tab==='mailbox'?'flex':'none'
+  document.getElementById('tabBroadcast').style.display=tab==='broadcast'?'flex':'none'
+  document.getElementById('tabCommands').style.display=tab==='commands'?'flex':'none'
 }
+
+window.openLb = url => { document.getElementById('lightboxImg').src=url; document.getElementById('lightbox').classList.add('open') }
 
 init()
 </script>
