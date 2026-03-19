@@ -155,6 +155,63 @@
   .date-sep{display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:11px;margin:4px 0;}
   .date-sep::before,.date-sep::after{content:'';flex:1;height:1px;background:var(--border);}
 
+  /* DELETE CONTROLS */
+  .message-wrap{position:relative;display:flex;flex-direction:column;}
+  .message.user .message-wrap{align-items:flex-start;}
+  .message.owner .message-wrap{align-items:flex-end;}
+  .msg-actions{
+    display:none;gap:5px;margin-top:4px;
+  }
+  .message:hover .msg-actions{display:flex;}
+  .msg-action-btn{
+    padding:4px 10px;border-radius:8px;font-size:11px;font-weight:600;
+    border:none;cursor:pointer;transition:.15s;
+  }
+  .del-btn{background:rgba(255,79,107,0.15);color:var(--danger);border:1px solid rgba(255,79,107,0.3);}
+  .del-btn:hover{background:var(--danger);color:#fff;}
+
+  /* CLEAR CHAT BUTTON in header */
+  .clear-chat-btn{
+    margin-left:auto;
+    padding:7px 14px;border-radius:10px;
+    background:rgba(255,79,107,0.12);border:1px solid rgba(255,79,107,0.3);
+    color:var(--danger);font-size:12px;font-weight:600;cursor:pointer;transition:.2s;
+  }
+  .clear-chat-btn:hover{background:var(--danger);color:#fff;border-color:var(--danger);}
+
+  /* CONFIRM MODAL */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.75);
+    display:flex;align-items:center;justify-content:center;
+    z-index:500;backdrop-filter:blur(6px);
+    opacity:0;pointer-events:none;transition:.2s;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal-box{
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:20px;padding:32px;width:340px;
+    display:flex;flex-direction:column;gap:16px;
+    box-shadow:0 0 60px rgba(0,0,0,0.5);
+    transform:scale(0.92);transition:.2s;
+  }
+  .modal-overlay.open .modal-box{transform:scale(1);}
+  .modal-icon{font-size:40px;text-align:center;}
+  .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;text-align:center;}
+  .modal-desc{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.6;}
+  .modal-btns{display:flex;gap:10px;}
+  .modal-cancel{
+    flex:1;padding:11px;border-radius:12px;
+    background:var(--surface2);border:1px solid var(--border);
+    color:var(--text-muted);font-size:14px;cursor:pointer;transition:.2s;
+  }
+  .modal-cancel:hover{border-color:var(--text-muted);color:var(--text);}
+  .modal-confirm{
+    flex:1;padding:11px;border-radius:12px;
+    background:rgba(255,79,107,0.2);border:1px solid rgba(255,79,107,0.4);
+    color:var(--danger);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;
+  }
+  .modal-confirm:hover{background:var(--danger);color:#fff;border-color:var(--danger);}
+
   /* REPLY INPUT */
   .reply-area{
     padding:12px 16px 16px;
@@ -348,6 +405,7 @@
         <div class="chat-user-name" id="chatName">-</div>
         <div class="chat-user-id" id="chatUid">-</div>
       </div>
+      <button class="clear-chat-btn" onclick="confirmClearChat()">🗑️ Hapus Semua Chat</button>
     </div>
 
     <div class="messages-area" id="messagesArea" style="display:none"></div>
@@ -403,6 +461,19 @@
     </div>
   </div>
 
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <div class="modal-icon" id="modalIcon">🗑️</div>
+    <div class="modal-title" id="modalTitle">Konfirmasi Hapus</div>
+    <div class="modal-desc" id="modalDesc">Yakin ingin menghapus?</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Batal</button>
+      <button class="modal-confirm" id="modalConfirmBtn">Hapus</button>
+    </div>
+  </div>
 </div>
 
 <!-- LIGHTBOX -->
@@ -603,13 +674,80 @@ function renderMessage(msg) {
   const div  = document.createElement('div')
   div.className = 'message ' + (msg.sender === 'owner' ? 'owner' : 'user')
   div.id = 'msg-' + msg.id
+
   let inner = `<div class="sender-label">${msg.sender === 'owner' ? 'Owner (kamu)' : 'User'}</div>`
+  inner += `<div class="message-wrap">`
   inner += `<div class="bubble">`
   if (msg.image_url) inner += `<img src="${msg.image_url}" onclick="openLb('${msg.image_url}')" loading="lazy">`
   if (msg.content) inner += esc(msg.content)
-  inner += `</div><div class="msg-time">${fmtTime(msg.created_at)}</div>`
+  inner += `</div>`
+  inner += `<div class="msg-actions">
+    <button class="msg-action-btn del-btn" onclick="confirmDeleteMsg('${msg.id}')">🗑 Hapus</button>
+  </div>`
+  inner += `</div>`
+  inner += `<div class="msg-time">${fmtTime(msg.created_at)}</div>`
   div.innerHTML = inner
   area.appendChild(div)
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+let pendingAction = null
+
+function openModal({ icon, title, desc, onConfirm }) {
+  document.getElementById('modalIcon').textContent  = icon
+  document.getElementById('modalTitle').textContent = title
+  document.getElementById('modalDesc').textContent  = desc
+  pendingAction = onConfirm
+  document.getElementById('confirmModal').classList.add('open')
+}
+
+window.closeModal = function() {
+  document.getElementById('confirmModal').classList.remove('open')
+  pendingAction = null
+}
+
+document.getElementById('modalConfirmBtn').onclick = async () => {
+  if (pendingAction) await pendingAction()
+  closeModal()
+}
+
+// Close on overlay click
+document.getElementById('confirmModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('confirmModal')) closeModal()
+})
+
+// ── HAPUS 1 PESAN ─────────────────────────────────────────────
+window.confirmDeleteMsg = function(msgId) {
+  openModal({
+    icon: '🗑️',
+    title: 'Hapus Pesan',
+    desc: 'Pesan ini akan dihapus permanen dari database. Tidak bisa dibatalkan.',
+    onConfirm: async () => {
+      const { error } = await supabase.from('messages').delete().eq('id', msgId)
+      if (error) { showToast('Gagal hapus: ' + error.message); return }
+      const el = document.getElementById('msg-' + msgId)
+      if (el) { el.style.opacity='0'; el.style.transform='scale(0.9)'; el.style.transition='.2s'; setTimeout(()=>el.remove(),200) }
+      showToast('✅ Pesan dihapus')
+    }
+  })
+}
+
+// ── HAPUS SEMUA CHAT USER ─────────────────────────────────────
+window.confirmClearChat = function() {
+  if (!activeUid) return
+  const name = users[activeUid]?.name || activeUid
+  openModal({
+    icon: '⚠️',
+    title: 'Hapus Semua Chat',
+    desc: `Semua pesan dari ${name} (kedua sisi: user & owner) akan dihapus permanen dari database.`,
+    onConfirm: async () => {
+      const { error } = await supabase.from('messages').delete().eq('user_id', activeUid)
+      if (error) { showToast('Gagal: ' + error.message); return }
+      const area = document.getElementById('messagesArea')
+      area.innerHTML = '<div class="date-sep">Chat telah dihapus</div>'
+      showToast('✅ Semua chat dihapus')
+    }
+  })
 }
 
 window.openLb = url => {
