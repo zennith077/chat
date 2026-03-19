@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexChat — Messages</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --surface: #0f0f1a;
+    --surface2: #161625;
+    --border: #1e1e35;
+    --accent: #7c5cfc;
+    --accent2: #00e5ff;
+    --accent-glow: rgba(124,92,252,0.3);
+    --text: #e8e8f0;
+    --text-muted: #6b6b8a;
+    --user-bubble: linear-gradient(135deg,#7c5cfc,#5b3de8);
+    --owner-bubble: #161625;
+    --danger: #ff4f6b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* HEADER */
+  .header {
+    display:flex; align-items:center; gap:12px;
+    padding:14px 20px;
+    background: rgba(15,15,26,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    position:relative; z-index:10;
+    flex-shrink:0;
+  }
+  .header-avatar {
+    width:40px; height:40px; border-radius:12px;
+    background: var(--user-bubble);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:16px;
+    box-shadow: 0 0 16px var(--accent-glow);
+  }
+  .header-info { flex:1; }
+  .header-name { font-family:'Syne',sans-serif; font-weight:700; font-size:15px; }
+  .header-status { font-size:11px; color:var(--accent2); display:flex; align-items:center; gap:5px; }
+  .status-dot { width:6px; height:6px; background:var(--accent2); border-radius:50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,229,255,0.4)} 50%{opacity:0.7;box-shadow:0 0 0 6px rgba(0,229,255,0)} }
+  .header-nav { display:flex; gap:8px; }
+  .nav-btn {
+    padding:7px 14px; border-radius:8px;
+    background: var(--surface2); border:1px solid var(--border);
+    color:var(--text-muted); font-size:12px; font-family:'DM Sans',sans-serif;
+    cursor:pointer; text-decoration:none;
+    transition: all .2s;
+  }
+  .nav-btn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .user-badge {
+    padding:6px 12px; border-radius:20px;
+    background: rgba(124,92,252,0.15); border:1px solid rgba(124,92,252,0.3);
+    font-size:11px; color:var(--accent); font-weight:500;
+  }
+
+  /* MESSAGES AREA */
+  .messages-area {
+    flex:1; overflow-y:auto; padding:20px;
+    display:flex; flex-direction:column; gap:12px;
+    position:relative; z-index:1;
+  }
+  .messages-area::-webkit-scrollbar { width:4px; }
+  .messages-area::-webkit-scrollbar-track { background:transparent; }
+  .messages-area::-webkit-scrollbar-thumb { background:var(--border); border-radius:4px; }
+
+  /* BUBBLES */
+  .message { display:flex; flex-direction:column; max-width:72%; animation: msgIn .25s ease; }
+  @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .message.user { align-self:flex-end; align-items:flex-end; }
+  .message.owner { align-self:flex-start; align-items:flex-start; }
+  .bubble {
+    padding:10px 14px; border-radius:16px;
+    font-size:14px; line-height:1.5;
+    position:relative; word-break:break-word;
+  }
+  .message.user .bubble {
+    background: var(--user-bubble);
+    border-bottom-right-radius:4px;
+    box-shadow: 0 4px 20px rgba(124,92,252,0.3);
+  }
+  .message.owner .bubble {
+    background: var(--surface2);
+    border:1px solid var(--border);
+    border-bottom-left-radius:4px;
+  }
+  .bubble img { max-width:220px; max-height:220px; border-radius:10px; display:block; cursor:pointer; transition:.2s; }
+  .bubble img:hover { transform:scale(1.02); }
+  .msg-time { font-size:10px; color:var(--text-muted); margin-top:4px; padding:0 4px; }
+  .owner-label { font-size:10px; color:var(--accent); margin-bottom:4px; font-weight:600; padding:0 4px; }
+
+  /* DATE DIVIDER */
+  .date-divider { display:flex; align-items:center; gap:12px; color:var(--text-muted); font-size:11px; }
+  .date-divider::before,.date-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* INPUT AREA */
+  .input-area {
+    padding:12px 16px 16px;
+    background: rgba(15,15,26,0.97);
+    border-top:1px solid var(--border);
+    position:relative; z-index:10;
+    flex-shrink:0;
+  }
+
+  /* COMMAND DROPDOWN */
+  .cmd-dropdown {
+    position:absolute; bottom:100%; left:16px; right:16px;
+    background: var(--surface2); border:1px solid var(--border);
+    border-radius:14px; overflow:hidden;
+    margin-bottom:8px;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
+    display:none;
+  }
+  .cmd-dropdown.active { display:block; animation: dropUp .2s ease; }
+  @keyframes dropUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .cmd-header { padding:10px 14px 6px; font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+  .cmd-item {
+    padding:10px 14px; cursor:pointer;
+    display:flex; align-items:center; gap:10px;
+    transition:.15s;
+  }
+  .cmd-item:hover { background:rgba(124,92,252,0.15); }
+  .cmd-name { font-family:'Syne',sans-serif; font-weight:700; color:var(--accent); font-size:14px; }
+  .cmd-desc { font-size:12px; color:var(--text-muted); }
+
+  /* INPUT ROW */
+  .input-row { display:flex; gap:10px; align-items:flex-end; }
+  .input-wrap { flex:1; position:relative; }
+  .chat-input {
+    width:100%; padding:12px 16px;
+    background: var(--surface2); border:1px solid var(--border);
+    border-radius:14px; color:var(--text);
+    font-family:'DM Sans',sans-serif; font-size:14px;
+    resize:none; max-height:120px; min-height:44px;
+    transition:.2s; outline:none;
+    line-height:1.4;
+  }
+  .chat-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+  .chat-input::placeholder { color:var(--text-muted); }
+
+  .icon-btn {
+    width:44px; height:44px; border-radius:12px;
+    background:var(--surface2); border:1px solid var(--border);
+    color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:.2s; flex-shrink:0; font-size:18px;
+  }
+  .icon-btn:hover { background:var(--surface); border-color:var(--accent); color:var(--accent); }
+  .send-btn {
+    width:44px; height:44px; border-radius:12px;
+    background: var(--user-bubble); border:none;
+    color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:.2s; flex-shrink:0; font-size:18px;
+    box-shadow: 0 4px 16px var(--accent-glow);
+  }
+  .send-btn:hover { transform:scale(1.05); box-shadow:0 6px 24px var(--accent-glow); }
+  .send-btn:active { transform:scale(0.97); }
+  #imageInput { display:none; }
+
+  /* IMAGE PREVIEW */
+  .img-preview {
+    display:none; margin-bottom:10px;
+    position:relative; display:none;
+    align-items:center; gap:10px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:12px; padding:8px 12px;
+  }
+  .img-preview.active { display:flex; }
+  .img-preview img { width:52px; height:52px; border-radius:8px; object-fit:cover; }
+  .img-preview-name { font-size:12px; color:var(--text-muted); flex:1; }
+  .img-preview-remove { cursor:pointer; color:var(--danger); font-size:18px; }
+
+  /* TOAST */
+  .toast {
+    position:fixed; bottom:90px; left:50%; transform:translateX(-50%);
+    background:var(--surface2); border:1px solid var(--border);
+    padding:10px 20px; border-radius:20px;
+    font-size:13px; color:var(--text); z-index:100;
+    opacity:0; pointer-events:none; transition:.3s;
+  }
+  .toast.show { opacity:1; }
+
+  /* IMAGE LIGHTBOX */
+  .lightbox {
+    position:fixed; inset:0; background:rgba(0,0,0,0.9);
+    display:flex; align-items:center; justify-content:center;
+    z-index:999; display:none; cursor:zoom-out;
+  }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:90vh; border-radius:12px; }
+
+  /* LOGIN SCREEN */
+  .login-screen {
+    position:fixed; inset:0;
+    background:var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    z-index:999;
+    flex-direction:column; gap:24px;
+  }
+  .login-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:20px; padding:40px;
+    width:340px; display:flex; flex-direction:column; gap:20px;
+    box-shadow: 0 0 60px rgba(124,92,252,0.1);
+  }
+  .login-title { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; text-align:center; }
+  .login-sub { text-align:center; color:var(--text-muted); font-size:13px; }
+  .login-input {
+    padding:12px 16px; border-radius:12px;
+    background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px;
+    outline:none; width:100%; transition:.2s;
+  }
+  .login-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+  .login-btn {
+    padding:13px; border-radius:12px;
+    background:var(--user-bubble); border:none;
+    color:#fff; font-family:'Syne',sans-serif; font-weight:700; font-size:15px;
+    cursor:pointer; transition:.2s;
+    box-shadow: 0 4px 20px var(--accent-glow);
+  }
+  .login-btn:hover { transform:translateY(-1px); box-shadow:0 8px 28px var(--accent-glow); }
+  .login-or { text-align:center; color:var(--text-muted); font-size:12px; }
+  .login-guest { text-align:center; color:var(--accent); font-size:13px; cursor:pointer; text-decoration:underline; }
+  .login-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:36px; text-align:center;
+    background:linear-gradient(135deg,#7c5cfc,#00e5ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .login-err { color:var(--danger); font-size:12px; text-align:center; display:none; }
+
+  /* UPLOAD PROGRESS */
+  .upload-indicator {
+    position:absolute; bottom:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    transform:scaleX(0); transform-origin:left;
+    transition:.3s; border-radius:2px;
+  }
+  .uploading .upload-indicator { transform:scaleX(1); }
+
+  @media(max-width:480px) {
+    .header-nav .nav-btn:first-child { display:none; }
+    .messages-area { padding:12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-logo">NexChat</div>
+  <div class="login-card">
+    <div class="login-title">Selamat Datang</div>
+    <div class="login-sub">Login untuk memulai percakapan dengan Owner</div>
+    <input class="login-input" id="loginEmail" type="email" placeholder="Email kamu">
+    <input class="login-input" id="loginPass" type="password" placeholder="Password">
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="loginBtn">Masuk</button>
+    <div class="login-or">— atau —</div>
+    <div class="login-guest" id="guestBtn">Lanjutkan sebagai Tamu (tanpa login)</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-avatar" id="headerAvatar">?</div>
+  <div class="header-info">
+    <div class="header-name">Owner Support</div>
+    <div class="header-status"><span class="status-dot"></span> Online</div>
+  </div>
+  <div class="user-badge" id="userBadge">Loading...</div>
+  <div class="header-nav">
+    <a class="nav-btn" href="mailbox.html">📬 Mailbox</a>
+    <button class="nav-btn" id="logoutBtn">Keluar</button>
+  </div>
+</div>
+
+<!-- MESSAGES -->
+<div class="messages-area" id="messagesArea">
+  <div class="date-divider">Hari ini</div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="">
+</div>
+
+<!-- INPUT AREA -->
+<div class="input-area">
+  <div class="cmd-dropdown" id="cmdDropdown">
+    <div class="cmd-header">⚡ Slash Commands</div>
+    <div id="cmdList"></div>
+  </div>
+  <div class="img-preview" id="imgPreview">
+    <img id="previewThumb" src="">
+    <div class="img-preview-name" id="previewName">image.jpg</div>
+    <div class="img-preview-remove" onclick="clearImage()">✕</div>
+  </div>
+  <div class="input-row">
+    <button class="icon-btn" onclick="document.getElementById('imageInput').click()" title="Kirim Gambar">🖼️</button>
+    <input type="file" id="imageInput" accept="image/*">
+    <div class="input-wrap">
+      <textarea class="chat-input" id="chatInput" placeholder="Ketik pesan... ketik / untuk command" rows="1"></textarea>
+      <div class="upload-indicator" id="uploadIndicator"></div>
+    </div>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+// ============================================================
+// KONFIGURASI — GANTI DENGAN MILIK KAMU
+// ============================================================
+const SUPABASE_URL = "https://hlayyekwhahgdftvodbh.supabase.co"
+const SUPABASE_KEY = "sb_publishable_7BIpp44f-1f0GWcftvS8Lg_CCXPHYG7"
+// ============================================================
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+let userId = null
+let selectedFile = null
+let commands = []
+
+// ── UTILS ────────────────────────────────────────────────────
+function showToast(msg, dur = 2500) {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), dur)
+}
+function fmtTime(ts) {
+  const d = new Date(ts)
+  return d.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})
+}
+function scrollBottom() {
+  const el = document.getElementById('messagesArea')
+  el.scrollTop = el.scrollHeight
+}
+function autoResize(el) {
+  el.style.height = 'auto'
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px'
+}
+
+// ── AUTH ─────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (session) {
+    userId = session.user.id
+    document.getElementById('loginScreen').style.display = 'none'
+    setUserBadge(session.user.email || 'User')
+  } else {
+    // cek guest
+    const guestId = localStorage.getItem('nexchat_guest_id')
+    if (guestId) {
+      userId = guestId
+      document.getElementById('loginScreen').style.display = 'none'
+      setUserBadge('Tamu')
+    }
+  }
+
+  if (userId) startApp()
+}
+
+function setUserBadge(label) {
+  const short = label.split('@')[0].substring(0, 10)
+  document.getElementById('userBadge').textContent = '👤 ' + short
+  document.getElementById('headerAvatar').textContent = short[0].toUpperCase()
+}
+
+document.getElementById('loginBtn').onclick = async () => {
+  const email = document.getElementById('loginEmail').value.trim()
+  const pass  = document.getElementById('loginPass').value
+  const err   = document.getElementById('loginErr')
+  err.style.display = 'none'
+  if (!email || !pass) { err.textContent = 'Isi email dan password'; err.style.display = 'block'; return }
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
+  if (error) {
+    // Coba sign up jika belum ada akun
+    const { data: su, error: se } = await supabase.auth.signUp({ email, password: pass })
+    if (se) { err.textContent = se.message; err.style.display = 'block'; return }
+    userId = su.user.id
+  } else {
+    userId = data.user.id
+  }
+  document.getElementById('loginScreen').style.display = 'none'
+  setUserBadge(email)
+  startApp()
+}
+
+document.getElementById('guestBtn').onclick = () => {
+  let gid = localStorage.getItem('nexchat_guest_id')
+  if (!gid) { gid = crypto.randomUUID(); localStorage.setItem('nexchat_guest_id', gid) }
+  userId = gid
+  document.getElementById('loginScreen').style.display = 'none'
+  setUserBadge('Tamu')
+  startApp()
+}
+
+document.getElementById('logoutBtn').onclick = async () => {
+  await supabase.auth.signOut()
+  localStorage.removeItem('nexchat_guest_id')
+  location.reload()
+}
+
+// ── APP START ────────────────────────────────────────────────
+async function startApp() {
+  await loadCommands()
+  await loadMessages()
+  subscribeMessages()
+}
+
+// ── LOAD COMMANDS ────────────────────────────────────────────
+async function loadCommands() {
+  const { data } = await supabase.from('commands').select('*')
+  commands = data || []
+}
+
+// ── LOAD MESSAGES ────────────────────────────────────────────
+async function loadMessages() {
+  const { data } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: true })
+
+  const area = document.getElementById('messagesArea')
+  area.innerHTML = '<div class="date-divider">Hari ini</div>'
+  ;(data || []).forEach(m => renderMessage(m))
+  scrollBottom()
+}
+
+// ── RENDER MESSAGE ───────────────────────────────────────────
+function renderMessage(msg) {
+  const area = document.getElementById('messagesArea')
+  const div  = document.createElement('div')
+  div.className = 'message ' + msg.sender
+  div.id = 'msg-' + msg.id
+
+  let inner = ''
+  if (msg.sender === 'owner') inner += `<div class="owner-label">Owner</div>`
+  inner += `<div class="bubble">`
+  if (msg.image_url) inner += `<img src="${msg.image_url}" onclick="openLightbox('${msg.image_url}')" loading="lazy">`
+  if (msg.content) inner += `<span>${escapeHtml(msg.content)}</span>`
+  inner += `</div><div class="msg-time">${fmtTime(msg.created_at)}</div>`
+  div.innerHTML = inner
+  area.appendChild(div)
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+// ── REALTIME ─────────────────────────────────────────────────
+function subscribeMessages() {
+  supabase.channel('chat-' + userId)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'messages',
+      filter: `user_id=eq.${userId}`
+    }, payload => {
+      const msg = payload.new
+      if (!document.getElementById('msg-' + msg.id)) {
+        renderMessage(msg)
+        scrollBottom()
+        if (msg.sender === 'owner') {
+          showToast('📨 Pesan baru dari Owner')
+          if (Notification.permission === 'granted') {
+            new Notification('Owner', { body: msg.content || '[Gambar]' })
+          }
+        }
+      }
+    })
+    .subscribe()
+
+  Notification.requestPermission()
+}
+
+// ── SEND MESSAGE ─────────────────────────────────────────────
+window.sendMessage = async function() {
+  const input = document.getElementById('chatInput')
+  const text  = input.value.trim()
+  if (!text && !selectedFile) return
+
+  const sendBtn = document.getElementById('sendBtn')
+  sendBtn.disabled = true
+
+  let image_url = null
+  if (selectedFile) {
+    image_url = await uploadImage(selectedFile)
+    clearImage()
+  }
+
+  const { error } = await supabase.from('messages').insert({
+    user_id: userId,
+    sender: 'user',
+    content: text || null,
+    image_url
+  })
+
+  if (error) showToast('Gagal kirim: ' + error.message)
+  input.value = ''; input.style.height = 'auto'
+  hideCmdDropdown()
+  sendBtn.disabled = false
+}
+
+// ── UPLOAD IMAGE ─────────────────────────────────────────────
+async function uploadImage(file) {
+  const wrap = document.getElementById('chatInput').parentElement
+  wrap.classList.add('uploading')
+  const path = `${userId}/${Date.now()}-${file.name}`
+  const { error } = await supabase.storage.from('chat-images').upload(path, file, { upsert: true })
+  wrap.classList.remove('uploading')
+  if (error) { showToast('Upload gagal: ' + error.message); return null }
+  const { data } = supabase.storage.from('chat-images').getPublicUrl(path)
+  return data.publicUrl
+}
+
+// ── IMAGE PREVIEW ─────────────────────────────────────────────
+document.getElementById('imageInput').onchange = e => {
+  const file = e.target.files[0]; if (!file) return
+  selectedFile = file
+  const prev = document.getElementById('imgPreview')
+  document.getElementById('previewThumb').src = URL.createObjectURL(file)
+  document.getElementById('previewName').textContent = file.name
+  prev.classList.add('active')
+}
+
+window.clearImage = function() {
+  selectedFile = null
+  document.getElementById('imgPreview').classList.remove('active')
+  document.getElementById('imageInput').value = ''
+}
+
+// ── COMMAND SYSTEM ────────────────────────────────────────────
+const chatInput = document.getElementById('chatInput')
+chatInput.addEventListener('input', () => {
+  autoResize(chatInput)
+  const val = chatInput.value
+  if (val.startsWith('/')) {
+    const q = val.slice(1).toLowerCase()
+    const filtered = commands.filter(c => c.command.toLowerCase().includes(q))
+    showCmdDropdown(filtered)
+  } else {
+    hideCmdDropdown()
+  }
+})
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage() }
+})
+
+function showCmdDropdown(cmds) {
+  const list = document.getElementById('cmdList')
+  list.innerHTML = ''
+  cmds.forEach(c => {
+    const item = document.createElement('div')
+    item.className = 'cmd-item'
+    item.innerHTML = `<div><div class="cmd-name">/${c.command}</div><div class="cmd-desc">${c.response.substring(0,60)}...</div></div>`
+    item.onclick = () => executeCommand(c)
+    list.appendChild(item)
+  })
+  document.getElementById('cmdDropdown').classList.toggle('active', cmds.length > 0)
+}
+
+function hideCmdDropdown() { document.getElementById('cmdDropdown').classList.remove('active') }
+
+async function executeCommand(cmd) {
+  hideCmdDropdown()
+  chatInput.value = ''
+  // Kirim pesan user dulu
+  await supabase.from('messages').insert({ user_id: userId, sender: 'user', content: '/' + cmd.command })
+  // Kirim balasan owner otomatis
+  await supabase.from('messages').insert({ user_id: userId, sender: 'owner', content: cmd.response })
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────────────
+window.openLightbox = function(url) {
+  document.getElementById('lightboxImg').src = url
+  document.getElementById('lightbox').classList.add('open')
+}
+window.closeLightbox = function() {
+  document.getElementById('lightbox').classList.remove('open')
+}
+
+// ── BOOT ──────────────────────────────────────────────────────
+init()
+</script>
+</body>
+</html>
