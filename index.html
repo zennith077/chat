@@ -17,6 +17,7 @@
   body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
+  /* HEADER */
   .header{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(15,15,26,0.95);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);position:relative;z-index:10;flex-shrink:0;}
   .header-avatar{width:40px;height:40px;border-radius:12px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;box-shadow:0 0 16px var(--accent-glow);}
   .header-info{flex:1;}
@@ -48,7 +49,7 @@
   .typing-dots span{display:inline-block;width:5px;height:5px;background:var(--accent2);border-radius:50%;animation:tdot 1.2s infinite;}
   .typing-dots span:nth-child(2){animation-delay:.2s;}
   .typing-dots span:nth-child(3){animation-delay:.4s;}
-  @keyframes tdot{0%,80%,100%{transform:scale(0.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+  @keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
 
   /* BUBBLES */
   .message{display:flex;flex-direction:column;max-width:72%;animation:msgIn .25s ease;}
@@ -59,7 +60,7 @@
   .message.user .bubble{background:var(--user-bubble);border-bottom-right-radius:4px;box-shadow:0 4px 20px rgba(124,92,252,0.3);}
   .message.owner .bubble{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:4px;}
   .bubble img{max-width:220px;max-height:220px;border-radius:10px;display:block;cursor:pointer;}
-  .msg-time{font-size:10px;color:var(--text-muted);margin-top:4px;padding:0 4px;display:flex;align-items:center;gap:5px;}
+  .msg-footer{font-size:10px;color:var(--text-muted);margin-top:4px;padding:0 4px;display:flex;align-items:center;gap:5px;}
   .owner-label{font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:600;padding:0 4px;}
   .edited-tag{font-size:10px;color:var(--text-muted);font-style:italic;}
   .msg-status{font-size:12px;}
@@ -68,16 +69,16 @@
 
   /* REPLY QUOTE */
   .reply-quote{background:rgba(255,255,255,0.07);border-left:3px solid var(--accent2);border-radius:8px;padding:6px 10px;margin-bottom:6px;font-size:12px;color:var(--text-muted);}
-  .reply-quote .rq-author{color:var(--accent2);font-weight:600;margin-bottom:2px;}
-  .reply-quote .rq-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rq-author{color:var(--accent2);font-weight:600;margin-bottom:2px;}
+  .rq-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-  /* REPLY PREVIEW BAR */
+  /* REPLY PREVIEW */
   .reply-preview{display:none;padding:8px 16px;background:var(--surface2);border-top:1px solid var(--border);flex-shrink:0;align-items:center;gap:10px;position:relative;z-index:5;}
   .reply-preview.active{display:flex;}
-  .rp-content{flex:1;border-left:3px solid var(--accent2);padding-left:10px;}
+  .rp-bar{flex:1;border-left:3px solid var(--accent2);padding-left:10px;}
   .rp-author{font-size:11px;color:var(--accent2);font-weight:600;}
   .rp-text{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .rp-close{cursor:pointer;color:var(--text-muted);font-size:18px;padding:4px;}
+  .rp-close{cursor:pointer;color:var(--text-muted);font-size:20px;line-height:1;}
   .rp-close:hover{color:var(--danger);}
 
   /* MSG ACTIONS */
@@ -105,7 +106,7 @@
   .input-area{padding:12px 16px 16px;background:rgba(15,15,26,0.97);border-top:1px solid var(--border);position:relative;z-index:10;flex-shrink:0;}
   .cmd-dropdown{position:absolute;bottom:100%;left:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:8px;box-shadow:0 -8px 32px rgba(0,0,0,0.4);display:none;}
   .cmd-dropdown.active{display:block;}
-  .cmd-header{padding:10px 14px 6px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+  .cmd-header-label{padding:10px 14px 6px;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
   .cmd-item{padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:.15s;}
   .cmd-item:hover{background:rgba(124,92,252,0.15);}
   .cmd-name{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:14px;}
@@ -125,8 +126,11 @@
   .img-preview-name{font-size:12px;color:var(--text-muted);flex:1;}
   .img-preview-remove{cursor:pointer;color:var(--danger);font-size:18px;}
 
+  /* TOAST */
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border);padding:10px 20px;border-radius:20px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:.3s;white-space:nowrap;}
   .toast.show{opacity:1;}
+
+  /* LIGHTBOX */
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:999;cursor:zoom-out;}
   .lightbox.open{display:flex;}
   .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;}
@@ -143,7 +147,7 @@
   .login-or{text-align:center;color:var(--text-muted);font-size:12px;}
   .login-guest{text-align:center;color:var(--accent);font-size:13px;cursor:pointer;text-decoration:underline;}
   .login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;text-align:center;background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .login-err{color:var(--danger);font-size:12px;text-align:center;display:none;}
+  .login-err{color:var(--danger);font-size:12px;text-align:center;min-height:16px;}
 </style>
 </head>
 <body>
@@ -189,7 +193,7 @@
 </div>
 
 <div class="reply-preview" id="replyPreview">
-  <div class="rp-content">
+  <div class="rp-bar">
     <div class="rp-author" id="rpAuthor"></div>
     <div class="rp-text" id="rpText"></div>
   </div>
@@ -198,7 +202,7 @@
 
 <div class="input-area">
   <div class="cmd-dropdown" id="cmdDropdown">
-    <div class="cmd-header">⚡ Slash Commands</div>
+    <div class="cmd-header-label">⚡ Slash Commands</div>
     <div id="cmdList"></div>
   </div>
   <div class="img-preview" id="imgPreview">
@@ -220,69 +224,78 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+// ── GANTI INI ─────────────────────────────────────────────────
 const SUPABASE_URL = "https://hlayyekwhahgdftvodbh.supabase.co"
 const SUPABASE_KEY = "sb_publishable_7BIpp44f-1f0GWcftvS8Lg_CCXPHYG7"
-const SESSION_TIMEOUT_MS = 30 * 60 * 1000 // 30 menit
+// ─────────────────────────────────────────────────────────────
 
+const SESSION_TIMEOUT = 30 * 60 * 1000 // 30 menit
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-let userId = null, userEmail = '', selectedFile = null
+let userId = null, selectedFile = null
 let commands = [], replyTo = null
-let typingTimeout = null, sessionTimer = null
-let lastActivity = Date.now()
+let typingTimeout = null, typingSent = false
+let sessionTimer = null, lastActivity = Date.now()
+let typingChannel = null
 
 // ── UTILS ──────────────────────────────────────────────────────
 const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
 const fmtTime = ts => new Date(ts).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})
-const scrollBottom = () => { const a = document.getElementById('messagesArea'); a.scrollTop = a.scrollHeight }
+const scrollBottom = () => { const a=document.getElementById('messagesArea'); a.scrollTop=a.scrollHeight }
 const autoResize = el => { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px' }
 
 function showToast(msg, dur=2500) {
-  const t = document.getElementById('toast')
-  t.textContent=msg; t.classList.add('show')
-  setTimeout(()=>t.classList.remove('show'), dur)
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),dur)
 }
 
-// ── SESSION TIMEOUT ────────────────────────────────────────────
-function startSessionTimer() {
-  ['click','keydown','touchstart'].forEach(e => document.addEventListener(e, ()=>{ lastActivity=Date.now() }, {passive:true}))
-  sessionTimer = setInterval(async () => {
-    if (Date.now() - lastActivity > SESSION_TIMEOUT_MS) {
+// ── SESSION ────────────────────────────────────────────────────
+function startSession() {
+  ['click','keydown','touchstart'].forEach(e=>document.addEventListener(e,()=>lastActivity=Date.now(),{passive:true}))
+  sessionTimer = setInterval(async()=>{
+    if (Date.now()-lastActivity > SESSION_TIMEOUT) {
       clearInterval(sessionTimer)
-      showToast('⏱️ Sesi habis, silakan login ulang')
+      showToast('⏱️ Sesi habis, login ulang')
       await supabase.auth.signOut()
       localStorage.removeItem('nexchat_guest_id')
-      setTimeout(()=>location.reload(), 2000)
+      setTimeout(()=>location.reload(),2000)
     }
-  }, 60000)
+  },60000)
 }
 
 // ── AUTH ───────────────────────────────────────────────────────
 async function init() {
-  const { data:{ session } } = await supabase.auth.getSession()
+  const {data:{session}} = await supabase.auth.getSession()
   if (session) {
-    userId = session.user.id; userEmail = session.user.email||'User'
-    hide('loginScreen'); setUserBadge(userEmail)
-    await checkBanned(); startSessionTimer(); startApp()
+    userId = session.user.id
+    document.getElementById('loginScreen').style.display = 'none'
+    setUserBadge(session.user.email||'User')
+    await checkBanned()
+    startSession(); startApp()
   } else {
     const gid = localStorage.getItem('nexchat_guest_id')
     if (gid) {
-      userId = gid; userEmail = 'Tamu'
-      hide('loginScreen'); setUserBadge('Tamu')
-      startSessionTimer(); startApp()
+      userId = gid
+      document.getElementById('loginScreen').style.display = 'none'
+      setUserBadge('Tamu')
+      startSession(); startApp()
     }
   }
 }
 
-function hide(id) { document.getElementById(id).style.display='none' }
-function show(id, d='flex') { document.getElementById(id).style.display=d }
-
 async function checkBanned() {
-  const { data } = await supabase.from('profiles').select('banned,vip').eq('id', userId).maybeSingle()
-  if (data?.banned) {
-    show('bannedScreen'); return true
-  }
-  if (data?.vip) document.getElementById('vipBadge').style.display = 'inline-block'
+  try {
+    const {data} = await supabase.from('profiles').select('banned,vip').eq('id',userId).maybeSingle()
+    if (data?.banned) {
+      document.getElementById('bannedScreen').classList.add('show')
+      document.querySelector('.header').style.display = 'none'
+      document.getElementById('messagesArea').style.display = 'none'
+      document.getElementById('typingBar').style.display = 'none'
+      document.querySelector('.input-area').style.display = 'none'
+      return true
+    }
+    if (data?.vip) document.getElementById('vipBadge').style.display = 'inline-block'
+  } catch(e) { /* profile belum ada, lanjut */ }
   return false
 }
 
@@ -295,27 +308,36 @@ function setUserBadge(label) {
 document.getElementById('loginBtn').onclick = async () => {
   const email = document.getElementById('loginEmail').value.trim()
   const pass  = document.getElementById('loginPass').value
-  const err   = document.getElementById('loginErr'); err.style.display='none'
-  if (!email||!pass) { err.textContent='Isi semua field'; err.style.display='block'; return }
-  let { data, error } = await supabase.auth.signInWithPassword({ email, password: pass })
+  const err   = document.getElementById('loginErr')
+  err.textContent = ''
+  if (!email||!pass) { err.textContent='Isi email & password'; return }
+
+  // Coba login dulu
+  let {data, error} = await supabase.auth.signInWithPassword({email, password:pass})
+
+  // Kalau gagal, coba daftar
   if (error) {
-    const r = await supabase.auth.signUp({ email, password: pass })
-    if (r.error) { err.textContent=r.error.message; err.style.display='block'; return }
+    const r = await supabase.auth.signUp({email, password:pass})
+    if (r.error) { err.textContent = r.error.message; return }
     data = r.data
-    await supabase.from('profiles').upsert({ id: r.data.user.id, email, role:'user', banned:false, vip:false })
+    // Buat profile otomatis
+    await supabase.from('profiles').upsert({id:r.data.user.id, email, role:'user', banned:false, vip:false})
   }
-  userId=data.user.id; userEmail=email
-  hide('loginScreen'); setUserBadge(email)
+
+  userId = data.user.id
+  document.getElementById('loginScreen').style.display = 'none'
+  setUserBadge(email)
   if (await checkBanned()) return
-  startSessionTimer(); startApp()
+  startSession(); startApp()
 }
 
 document.getElementById('guestBtn').onclick = () => {
   let gid = localStorage.getItem('nexchat_guest_id')
   if (!gid) { gid=crypto.randomUUID(); localStorage.setItem('nexchat_guest_id',gid) }
-  userId=gid; userEmail='Tamu'
-  hide('loginScreen'); setUserBadge('Tamu')
-  startSessionTimer(); startApp()
+  userId = gid
+  document.getElementById('loginScreen').style.display = 'none'
+  setUserBadge('Tamu')
+  startSession(); startApp()
 }
 
 document.getElementById('logoutBtn').onclick = async () => {
@@ -325,43 +347,45 @@ document.getElementById('logoutBtn').onclick = async () => {
   location.reload()
 }
 
-// ── START ──────────────────────────────────────────────────────
+// ── START APP ─────────────────────────────────────────────────
 async function startApp() {
-  await loadCommands(); await loadMessages()
-  subscribeMessages(); subscribeTyping()
+  await loadCommands()
+  await loadMessages()
+  subscribeMessages()
+  subscribeTyping()
   Notification.requestPermission()
 }
 
 async function loadCommands() {
-  const { data } = await supabase.from('commands').select('*')
+  const {data} = await supabase.from('commands').select('*')
   commands = data||[]
 }
 
 async function loadMessages() {
-  const { data } = await supabase.from('messages').select('*').eq('user_id',userId).order('created_at',{ascending:true})
+  const {data} = await supabase.from('messages').select('*').eq('user_id',userId).order('created_at',{ascending:true})
   const area = document.getElementById('messagesArea')
   area.innerHTML = '<div class="date-divider">Hari ini</div>'
-  ;(data||[]).forEach(m => renderMessage(m))
-  scrollBottom(); markAllRead()
+  ;(data||[]).forEach(m=>renderMessage(m))
+  scrollBottom()
+  markRead()
 }
 
-async function markAllRead() {
+async function markRead() {
   await supabase.from('messages').update({status:'read'}).eq('user_id',userId).eq('sender','owner').neq('status','read')
 }
 
 // ── RENDER ─────────────────────────────────────────────────────
 function renderMessage(msg) {
+  if (document.getElementById('msg-'+msg.id)) { updateMsgStatus(msg); return }
   const area = document.getElementById('messagesArea')
-  const ex = document.getElementById('msg-'+msg.id)
-  if (ex) { updateMsg(ex, msg); return }
   const div = document.createElement('div')
   div.className = 'message '+msg.sender
   div.id = 'msg-'+msg.id
-  div.innerHTML = buildHTML(msg)
+  div.innerHTML = buildMsgHTML(msg)
   area.appendChild(div)
 }
 
-function buildHTML(msg) {
+function buildMsgHTML(msg) {
   const isUser = msg.sender === 'user'
   let h = isUser ? '' : '<div class="owner-label">Owner</div>'
 
@@ -373,58 +397,58 @@ function buildHTML(msg) {
   }
 
   h += `<div class="bubble" id="bubble-${msg.id}">`
-  if (msg.image_url) h += `<img src="${msg.image_url}" onclick="openLightbox('${msg.image_url}')" loading="lazy">`
+  if (msg.image_url) h += `<img src="${esc(msg.image_url)}" onclick="openLightbox('${esc(msg.image_url)}')" loading="lazy">`
   if (msg.content) h += `<span id="cnt-${msg.id}">${esc(msg.content)}</span>`
-  h += '</div>'
+  h += `</div>`
 
-  h += `<div class="msg-time">${fmtTime(msg.created_at)}`
-  if (msg.edited) h += ' <span class="edited-tag">(diedit)</span>'
+  h += `<div class="msg-footer">${fmtTime(msg.created_at)}`
+  if (msg.edited) h += ` <span class="edited-tag">(diedit)</span>`
   if (isUser) {
-    const s = msg.status==='read'?'read':'sent'
-    h += ` <span class="msg-status ${s}" id="st-${msg.id}">${msg.status==='read'?'✓✓':'✓'}</span>`
+    const cls = msg.status==='read'?'read':'sent'
+    h += ` <span class="msg-status ${cls}" id="st-${msg.id}">${msg.status==='read'?'✓✓':'✓'}</span>`
   }
-  h += '</div>'
+  h += `</div>`
 
-  const contentSafe = esc(msg.content||'[Gambar]').replace(/'/g,"&#39;")
+  // Actions
+  const cSafe = (msg.content||'[Gambar]').replace(/\\/g,'\\\\').replace(/'/g,"\\'")
   h += `<div class="msg-actions">
-    <button class="act-btn act-reply" onclick="setReply('${msg.id}','${msg.sender}','${contentSafe}')">↩ Reply</button>`
+    <button class="act-btn act-reply" onclick="setReply('${msg.id}','${msg.sender}','${cSafe}')">↩ Reply</button>`
   if (isUser) {
     h += `<button class="act-btn act-edit" onclick="startEdit('${msg.id}')">✏️ Edit</button>
     <button class="act-btn act-del" onclick="deleteMsg('${msg.id}')">🗑 Hapus</button>`
   }
-  h += '</div>'
+  h += `</div>`
   return h
 }
 
-function updateMsg(el, msg) {
+function updateMsgStatus(msg) {
   const st = document.getElementById('st-'+msg.id)
   if (st) { st.className='msg-status '+(msg.status==='read'?'read':'sent'); st.textContent=msg.status==='read'?'✓✓':'✓' }
   const cnt = document.getElementById('cnt-'+msg.id)
   if (cnt && msg.content) cnt.textContent = msg.content
 }
 
-// ── SUBSCRIBE ─────────────────────────────────────────────────
+// ── REALTIME ───────────────────────────────────────────────────
 function subscribeMessages() {
-  supabase.channel('chat-'+userId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`user_id=eq.${userId}`}, p=>{
-      if (!document.getElementById('msg-'+p.new.id)) {
-        renderMessage(p.new); scrollBottom()
-        if (p.new.sender==='owner') {
-          showToast('📨 Pesan baru dari Owner'); markAllRead()
-          if (Notification.permission==='granted') new Notification('Owner',{body:p.new.content||'[Gambar]'})
-        }
+  supabase.channel('chat-msg-'+userId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`user_id=eq.${userId}`},p=>{
+      renderMessage(p.new); scrollBottom()
+      if (p.new.sender==='owner') {
+        showToast('📨 Pesan baru dari Owner')
+        markRead()
+        if (Notification.permission==='granted') new Notification('Owner',{body:p.new.content||'[Gambar]'})
       }
     })
-    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:`user_id=eq.${userId}`}, p=>{
-      const el = document.getElementById('msg-'+p.new.id); if (el) updateMsg(el, p.new)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:`user_id=eq.${userId}`},p=>{
+      updateMsgStatus(p.new)
     })
     .subscribe()
 }
 
 function subscribeTyping() {
-  supabase.channel('typing-'+userId)
-    .on('broadcast',{event:'typing'}, p=>{
-      if (p.payload?.sender==='owner') {
+  typingChannel = supabase.channel('typing-room-'+userId)
+    .on('broadcast',{event:'typing'},p=>{
+      if (p.payload?.from==='owner') {
         document.getElementById('typingBar').classList.add('show')
         clearTimeout(typingTimeout)
         typingTimeout = setTimeout(()=>document.getElementById('typingBar').classList.remove('show'),3000)
@@ -452,101 +476,118 @@ window.sendMessage = async () => {
   const text = input.value.trim()
   if (!text && !selectedFile) return
   document.getElementById('sendBtn').disabled = true
+
   let image_url = null
   if (selectedFile) { image_url = await uploadImage(selectedFile); clearImage() }
-  await supabase.from('messages').insert({
-    user_id:userId, sender:'user', content:text||null, image_url,
-    status:'sent', edited:false,
+
+  const {error} = await supabase.from('messages').insert({
+    user_id: userId, sender: 'user',
+    content: text||null, image_url,
+    status: 'sent', edited: false,
     reply_to_content: replyTo?.content||null,
     reply_to_sender: replyTo?.sender||null
   })
-  input.value=''; input.style.height='auto'; clearReply(); hideCmds()
+  if (error) showToast('Gagal kirim: '+error.message)
+
+  input.value=''; input.style.height='auto'
+  clearReply(); hideCmds()
   document.getElementById('sendBtn').disabled = false
+
+  // Broadcast typing
+  broadcastTyping()
 }
 
-// ── TYPING BROADCAST ──────────────────────────────────────────
-let typingSent = false
-document.getElementById('chatInput').addEventListener('input', async e => {
-  autoResize(e.target)
-  const val = e.target.value
-  if (val.startsWith('/')) {
-    showCmds(commands.filter(c=>c.command.toLowerCase().includes(val.slice(1).toLowerCase())))
-  } else { hideCmds() }
-  if (!typingSent) {
+// ── TYPING ─────────────────────────────────────────────────────
+function broadcastTyping() {
+  if (!typingSent && typingChannel) {
     typingSent = true
-    await supabase.channel('typing-owner-'+userId).send({type:'broadcast',event:'typing',payload:{sender:'user',userId}})
+    typingChannel.send({type:'broadcast',event:'typing',payload:{from:'user',userId}})
     setTimeout(()=>typingSent=false, 2000)
   }
+}
+
+document.getElementById('chatInput').addEventListener('input', e => {
+  autoResize(e.target)
+  broadcastTyping()
+  const val = e.target.value
+  if (val.startsWith('/')) {
+    const q = val.slice(1).toLowerCase()
+    showCmds(commands.filter(c=>c.command.toLowerCase().includes(q)))
+  } else hideCmds()
 })
+
 document.getElementById('chatInput').addEventListener('keydown', e => {
-  if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}
+  if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); sendMessage() }
 })
 
 // ── EDIT ───────────────────────────────────────────────────────
 window.startEdit = id => {
   const cnt = document.getElementById('cnt-'+id); if (!cnt) return
   const orig = cnt.textContent
-  const bubble = document.getElementById('bubble-'+id)
-  bubble.innerHTML = `<textarea class="edit-input" id="ei-${id}">${orig}</textarea>
+  document.getElementById('bubble-'+id).innerHTML =
+    `<textarea class="edit-input" id="ei-${id}">${orig}</textarea>
     <div class="edit-btns">
       <button class="edit-save" onclick="saveEdit('${id}')">Simpan</button>
-      <button class="edit-cancel-btn" onclick="cancelEdit('${id}','${esc(orig).replace(/'/g,"&#39;")}')">Batal</button>
+      <button class="edit-cancel-btn" onclick="cancelEdit('${id}','${orig.replace(/'/g,"\\'")}')">Batal</button>
     </div>`
   const ta = document.getElementById('ei-'+id)
   ta.focus(); ta.selectionStart=ta.value.length; autoResize(ta)
   ta.addEventListener('input',()=>autoResize(ta))
 }
 window.saveEdit = async id => {
-  const ta = document.getElementById('ei-'+id)
-  const nc = ta?.value.trim(); if (!nc) return
-  const {error} = await supabase.from('messages').update({content:nc,edited:true}).eq('id',id)
+  const ta = document.getElementById('ei-'+id); if (!ta) return
+  const nc = ta.value.trim(); if (!nc) return
+  const {error} = await supabase.from('messages').update({content:nc,edited:true}).eq('id',id).eq('sender','user')
   if (error) { showToast('Gagal edit'); return }
-  const bubble = document.getElementById('bubble-'+id)
-  bubble.innerHTML = `<span id="cnt-${id}">${esc(nc)}</span>`
-  showToast('✅ Diedit')
+  document.getElementById('bubble-'+id).innerHTML = `<span id="cnt-${id}">${esc(nc)}</span>`
+  showToast('✅ Pesan diedit')
 }
 window.cancelEdit = (id, orig) => {
-  document.getElementById('bubble-'+id).innerHTML = `<span id="cnt-${id}">${orig}</span>`
+  document.getElementById('bubble-'+id).innerHTML = `<span id="cnt-${id}">${esc(orig)}</span>`
 }
 
 // ── DELETE ─────────────────────────────────────────────────────
 window.deleteMsg = async id => {
   if (!confirm('Hapus pesan ini?')) return
-  await supabase.from('messages').delete().eq('id',id).eq('sender','user')
+  const {error} = await supabase.from('messages').delete().eq('id',id).eq('sender','user')
+  if (error) { showToast('Gagal hapus'); return }
   const el = document.getElementById('msg-'+id)
   if (el) { el.style.opacity='0'; el.style.transition='.2s'; setTimeout(()=>el.remove(),200) }
 }
 
 // ── UPLOAD ─────────────────────────────────────────────────────
 async function uploadImage(file) {
-  const path = `${userId}/${Date.now()}-${file.name}`
-  const {error} = await supabase.storage.from('chat-images').upload(path, file, {upsert:true})
-  if (error) { showToast('Upload gagal'); return null }
+  const path = `${userId}/${Date.now()}-${file.name.replace(/\s/g,'_')}`
+  const {error} = await supabase.storage.from('chat-images').upload(path,file,{upsert:true})
+  if (error) { showToast('Upload gagal: '+error.message); return null }
   return supabase.storage.from('chat-images').getPublicUrl(path).data.publicUrl
 }
 document.getElementById('imageInput').onchange = e => {
-  const f = e.target.files[0]; if (!f) return; selectedFile=f
+  const f = e.target.files[0]; if (!f) return
+  selectedFile = f
   document.getElementById('previewThumb').src = URL.createObjectURL(f)
   document.getElementById('previewName').textContent = f.name
   document.getElementById('imgPreview').classList.add('active')
 }
 window.clearImage = () => {
-  selectedFile=null
+  selectedFile = null
   document.getElementById('imgPreview').classList.remove('active')
-  document.getElementById('imageInput').value=''
+  document.getElementById('imageInput').value = ''
 }
 
 // ── COMMANDS ───────────────────────────────────────────────────
 function showCmds(list) {
   const el = document.getElementById('cmdList'); el.innerHTML=''
-  list.forEach(c => {
+  list.forEach(c=>{
     const d = document.createElement('div'); d.className='cmd-item'
-    d.innerHTML=`<div><div class="cmd-name">/${c.command}</div><div class="cmd-desc">${esc(c.response).substring(0,60)}...</div></div>`
-    d.onclick=()=>execCmd(c); el.appendChild(d)
+    d.innerHTML = `<div><div class="cmd-name">/${esc(c.command)}</div><div class="cmd-desc">${esc(c.response).substring(0,60)}...</div></div>`
+    d.onclick = ()=>execCmd(c)
+    el.appendChild(d)
   })
-  document.getElementById('cmdDropdown').classList.toggle('active', list.length>0)
+  document.getElementById('cmdDropdown').classList.toggle('active',list.length>0)
 }
 const hideCmds = () => document.getElementById('cmdDropdown').classList.remove('active')
+
 async function execCmd(c) {
   hideCmds(); document.getElementById('chatInput').value=''
   await supabase.from('messages').insert({user_id:userId,sender:'user',content:'/'+c.command,status:'sent',edited:false})
