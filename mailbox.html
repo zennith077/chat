@@ -6,7 +6,7 @@
 <title>NexChat — Mailbox</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#080810;--surface:#0f0f1a;--surface2:#161625;--border:#1e1e35;--accent:#7c5cfc;--accent2:#00e5ff;--accent-glow:rgba(124,92,252,0.3);--text:#e8e8f0;--text-muted:#6b6b8a;--user-bubble:linear-gradient(135deg,#7c5cfc,#5b3de8);--danger:#ff4f6b;--success:#00c97d;}
+  :root{--bg:#080810;--surface:#0f0f1a;--surface2:#161625;--border:#1e1e35;--accent:#7c5cfc;--accent2:#00e5ff;--accent-glow:rgba(124,92,252,0.3);--text:#e8e8f0;--text-muted:#6b6b8a;--user-bubble:linear-gradient(135deg,#7c5cfc,#5b3de8);--danger:#ff4f6b;}
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100dvh;}
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
@@ -14,12 +14,17 @@
   .header{display:flex;align-items:center;gap:14px;padding:16px 24px;background:rgba(15,15,26,0.95);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;}
   .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .page-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;flex:1;}
-  .badge{padding:5px 12px;border-radius:20px;background:rgba(124,92,252,0.2);border:1px solid rgba(124,92,252,0.4);font-size:12px;color:var(--accent);font-weight:600;display:none;}
-  .badge.show{display:inline-block;}
+  .unread-badge{padding:5px 12px;border-radius:20px;background:rgba(124,92,252,0.2);border:1px solid rgba(124,92,252,0.4);font-size:12px;color:var(--accent);font-weight:600;display:none;}
+  .unread-badge.show{display:inline-block;}
   .nav-btn{padding:8px 16px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);font-size:13px;cursor:pointer;text-decoration:none;transition:.2s;}
   .nav-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 
   .main{max-width:760px;margin:0 auto;padding:32px 20px;position:relative;z-index:1;}
+
+  .filter-tabs{display:flex;gap:8px;margin-bottom:24px;}
+  .tab{padding:8px 18px;border-radius:20px;font-size:13px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:.2s;}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
   .empty{text-align:center;padding:80px 20px;color:var(--text-muted);}
   .empty-icon{font-size:56px;margin-bottom:16px;}
 
@@ -32,20 +37,24 @@
   .mail-icon{width:44px;height:44px;border-radius:12px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 4px 14px var(--accent-glow);}
   .mail-meta{flex:1;min-width:0;}
   .mail-from{font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px;}
-  .mail-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .mail-title-text{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .mail-preview{font-size:13px;color:var(--text-muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .mail-time{font-size:11px;color:var(--text-muted);flex-shrink:0;text-align:right;}
-  .unread-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;margin-top:5px;margin-left:auto;box-shadow:0 0 8px var(--accent);}
+  .mail-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+  .mail-time{font-size:11px;color:var(--text-muted);}
+  .unread-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent);}
   .mail-card.read .unread-dot{display:none;}
   .mail-body{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;}
   .mail-body.open{max-height:600px;padding:16px 20px 20px;border-top:1px solid var(--border);}
-  .mail-content{font-size:14px;line-height:1.7;color:#c0c0d8;white-space:pre-wrap;word-break:break-word;margin-bottom:16px;}
+  .mail-content-text{font-size:14px;line-height:1.7;color:#c0c0d8;white-space:pre-wrap;word-break:break-word;margin-bottom:16px;}
   .mail-link{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;background:rgba(124,92,252,0.15);border:1px solid rgba(124,92,252,0.3);color:var(--accent);text-decoration:none;font-size:13px;font-weight:500;transition:.2s;}
   .mail-link:hover{background:var(--accent);color:#fff;}
 
-  .filter-tabs{display:flex;gap:8px;margin-bottom:24px;}
-  .tab{padding:8px 18px;border-radius:20px;font-size:13px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);cursor:pointer;transition:.2s;}
-  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  /* BANNED */
+  .banned-screen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:999;}
+  .banned-screen.show{display:flex;}
+  .banned-icon{font-size:64px;}
+  .banned-title{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--danger);}
+  .banned-desc{color:var(--text-muted);font-size:14px;text-align:center;max-width:300px;}
 
   /* LOGIN */
   .login-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:24px;}
@@ -57,17 +66,10 @@
   .login-btn:hover{transform:translateY(-1px);}
   .login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;text-align:center;background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
   .login-guest{text-align:center;color:var(--accent);font-size:13px;cursor:pointer;text-decoration:underline;}
-  .login-err{color:var(--danger);font-size:12px;text-align:center;display:none;}
+  .login-err{color:var(--danger);font-size:12px;text-align:center;min-height:16px;}
   .login-sub{text-align:center;color:var(--text-muted);font-size:13px;}
   .skel{height:90px;border-radius:18px;background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:400% 100%;animation:sk 1.5s infinite;margin-bottom:16px;}
-  @keyframes sk{from{background-position:100% 0}to{background-position:-100% 0}}
-
-  /* BANNED */
-  .banned-screen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:999;}
-  .banned-screen.show{display:flex;}
-  .banned-icon{font-size:64px;}
-  .banned-title{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--danger);}
-  .banned-desc{color:var(--text-muted);font-size:14px;text-align:center;max-width:300px;}
+  @keyframes sk{from{background-position:100%}to{background-position:-100%}}
 </style>
 </head>
 <body>
@@ -94,8 +96,8 @@
 <div class="header">
   <div class="logo">NexChat</div>
   <div class="page-title">📬 Mailbox</div>
-  <div class="badge" id="unreadBadge">0 baru</div>
-  <a class="nav-btn" href="index.html">💬 Chat</a>
+  <div class="unread-badge" id="unreadBadge">0 baru</div>
+  <a class="nav-btn" href="chat.html">💬 Chat</a>
   <button class="nav-btn" id="logoutBtn">Keluar</button>
 </div>
 
@@ -105,81 +107,87 @@
     <div class="tab" onclick="setFilter('unread',this)">Belum Dibaca</div>
     <div class="tab" onclick="setFilter('read',this)">Sudah Dibaca</div>
   </div>
-  <div id="mailList"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <div id="mailList">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
 </div>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+// ── GANTI INI ─────────────────────────────────────────────────
 const SUPABASE_URL = "https://hlayyekwhahgdftvodbh.supabase.co"
 const SUPABASE_KEY = "sb_publishable_7BIpp44f-1f0GWcftvS8Lg_CCXPHYG7"
-const SESSION_TIMEOUT_MS = 30 * 60 * 1000
+// ─────────────────────────────────────────────────────────────
 
+const SESSION_TIMEOUT = 30 * 60 * 1000
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+
 let userId = null, mails = [], filter = 'all'
-let readSet = new Set(JSON.parse(localStorage.getItem('nexchat_read')||'[]'))
 let sessionTimer = null, lastActivity = Date.now()
+let readSet = new Set(JSON.parse(localStorage.getItem('nexchat_read')||'[]'))
 
 const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
 
-function startSessionTimer() {
-  ['click','keydown','touchstart'].forEach(e => document.addEventListener(e,()=>{ lastActivity=Date.now() },{passive:true}))
-  sessionTimer = setInterval(async () => {
-    if (Date.now()-lastActivity > SESSION_TIMEOUT_MS) {
-      clearInterval(sessionTimer)
-      await supabase.auth.signOut()
-      localStorage.removeItem('nexchat_guest_id')
-      location.reload()
+function startSession() {
+  ['click','keydown','touchstart'].forEach(e=>document.addEventListener(e,()=>lastActivity=Date.now(),{passive:true}))
+  sessionTimer = setInterval(async()=>{
+    if (Date.now()-lastActivity > SESSION_TIMEOUT) {
+      clearInterval(sessionTimer); await supabase.auth.signOut()
+      localStorage.removeItem('nexchat_guest_id'); location.reload()
     }
-  }, 60000)
+  },60000)
 }
 
 async function init() {
   const {data:{session}} = await supabase.auth.getSession()
   if (session) {
-    userId=session.user.id
+    userId = session.user.id
     document.getElementById('loginOverlay').style.display='none'
     if (await checkBanned()) return
-    startSessionTimer(); startApp()
+    startSession(); startApp()
   } else {
     const gid = localStorage.getItem('nexchat_guest_id')
     if (gid) {
-      userId=gid
+      userId = gid
       document.getElementById('loginOverlay').style.display='none'
-      startSessionTimer(); startApp()
+      startSession(); startApp()
     }
   }
 }
 
 async function checkBanned() {
-  const {data} = await supabase.from('profiles').select('banned').eq('id',userId).maybeSingle()
-  if (data?.banned) { document.getElementById('bannedScreen').classList.add('show'); return true }
+  try {
+    const {data} = await supabase.from('profiles').select('banned').eq('id',userId).maybeSingle()
+    if (data?.banned) { document.getElementById('bannedScreen').classList.add('show'); return true }
+  } catch(e) {}
   return false
 }
 
 document.getElementById('loginBtn').onclick = async () => {
-  const email=document.getElementById('loginEmail').value.trim()
-  const pass=document.getElementById('loginPass').value
-  const err=document.getElementById('loginErr'); err.style.display='none'
-  if (!email||!pass){err.textContent='Isi semua field';err.style.display='block';return}
-  let {data,error}=await supabase.auth.signInWithPassword({email,password:pass})
-  if (error){
-    const r=await supabase.auth.signUp({email,password:pass})
-    if (r.error){err.textContent=r.error.message;err.style.display='block';return}
-    data=r.data
+  const email = document.getElementById('loginEmail').value.trim()
+  const pass  = document.getElementById('loginPass').value
+  const err   = document.getElementById('loginErr'); err.textContent=''
+  if (!email||!pass) { err.textContent='Isi email & password'; return }
+  let {data,error} = await supabase.auth.signInWithPassword({email,password:pass})
+  if (error) {
+    const r = await supabase.auth.signUp({email,password:pass})
+    if (r.error) { err.textContent=r.error.message; return }
+    data = r.data
     await supabase.from('profiles').upsert({id:r.data.user.id,email,role:'user',banned:false,vip:false})
   }
-  userId=data.user.id
+  userId = data.user.id
   document.getElementById('loginOverlay').style.display='none'
   if (await checkBanned()) return
-  startSessionTimer(); startApp()
+  startSession(); startApp()
 }
 
 document.getElementById('guestBtn').onclick = () => {
-  let gid=localStorage.getItem('nexchat_guest_id')
-  if (!gid){gid=crypto.randomUUID();localStorage.setItem('nexchat_guest_id',gid)}
-  userId=gid; document.getElementById('loginOverlay').style.display='none'
-  startSessionTimer(); startApp()
+  let gid = localStorage.getItem('nexchat_guest_id')
+  if (!gid) { gid=crypto.randomUUID(); localStorage.setItem('nexchat_guest_id',gid) }
+  userId = gid
+  document.getElementById('loginOverlay').style.display='none'
+  startSession(); startApp()
 }
 
 document.getElementById('logoutBtn').onclick = async () => {
@@ -187,7 +195,10 @@ document.getElementById('logoutBtn').onclick = async () => {
   localStorage.removeItem('nexchat_guest_id'); location.reload()
 }
 
-async function startApp() { await loadMails(); subscribeMailbox() }
+async function startApp() {
+  await loadMails(); subscribeMailbox()
+  Notification.requestPermission()
+}
 
 async function loadMails() {
   const {data} = await supabase.from('mailbox').select('*').eq('user_id',userId).order('created_at',{ascending:false})
@@ -196,68 +207,83 @@ async function loadMails() {
 
 function renderMails() {
   const list = document.getElementById('mailList')
-  const filtered = filter==='all'?mails : filter==='unread'?mails.filter(m=>!readSet.has(m.id)) : mails.filter(m=>readSet.has(m.id))
+  const filtered = filter==='all' ? mails
+    : filter==='unread' ? mails.filter(m=>!readSet.has(m.id))
+    : mails.filter(m=>readSet.has(m.id))
+
   const unread = mails.filter(m=>!readSet.has(m.id)).length
   const badge = document.getElementById('unreadBadge')
-  if (unread>0){badge.textContent=unread+' baru';badge.classList.add('show')}else badge.classList.remove('show')
-  if (!filtered.length){list.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div>Tidak ada surat</div></div>';return}
+  if (unread>0) { badge.textContent=unread+' baru'; badge.classList.add('show') }
+  else badge.classList.remove('show')
+
+  if (!filtered.length) {
+    list.innerHTML='<div class="empty"><div class="empty-icon">📭</div><div>Tidak ada surat</div></div>'
+    return
+  }
+
   list.innerHTML=''
   filtered.forEach(m=>{
-    const isRead=readSet.has(m.id)
-    const d=new Date(m.created_at),now=new Date()
-    const ts=d.toDateString()===now.toDateString()?d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})
-    const div=document.createElement('div')
-    div.className='mail-card '+(isRead?'read':'unread')
-    div.id='mail-'+m.id
-    div.innerHTML=`
+    const isRead = readSet.has(m.id)
+    const d = new Date(m.created_at), now = new Date()
+    const ts = d.toDateString()===now.toDateString()
+      ? d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})
+      : d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})
+
+    const div = document.createElement('div')
+    div.className = 'mail-card '+(isRead?'read':'unread')
+    div.id = 'mail-'+m.id
+    div.innerHTML = `
       <div class="mail-header" onclick="toggleMail('${m.id}')">
         <div class="mail-icon">📨</div>
         <div class="mail-meta">
           <div class="mail-from">From: Owner</div>
-          <div class="mail-title">${esc(m.title)}</div>
+          <div class="mail-title-text">${esc(m.title)}</div>
           <div class="mail-preview">${esc(m.content).substring(0,80)}</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+        <div class="mail-right">
           <div class="mail-time">${ts}</div>
           <div class="unread-dot"></div>
         </div>
       </div>
       <div class="mail-body" id="body-${m.id}">
-        <div class="mail-content">${esc(m.content)}</div>
-        ${m.link?`<a class="mail-link" href="${m.link}" target="_blank" rel="noopener">🔗 Buka Link</a>`:''}
+        <div class="mail-content-text">${esc(m.content)}</div>
+        ${m.link ? `<a class="mail-link" href="${esc(m.link)}" target="_blank" rel="noopener">🔗 Buka Link</a>` : ''}
       </div>`
     list.appendChild(div)
   })
 }
 
 window.toggleMail = id => {
-  const body=document.getElementById('body-'+id)
-  const card=document.getElementById('mail-'+id)
-  const wasOpen=body.classList.contains('open')
+  const body = document.getElementById('body-'+id)
+  const card = document.getElementById('mail-'+id)
+  const wasOpen = body.classList.contains('open')
   document.querySelectorAll('.mail-body.open').forEach(b=>b.classList.remove('open'))
   if (!wasOpen) {
     body.classList.add('open')
-    if (!readSet.has(id)){
-      readSet.add(id); localStorage.setItem('nexchat_read',JSON.stringify([...readSet]))
+    if (!readSet.has(id)) {
+      readSet.add(id)
+      localStorage.setItem('nexchat_read',JSON.stringify([...readSet]))
       card.classList.remove('unread'); card.classList.add('read')
-      const unread=mails.filter(m=>!readSet.has(m.id)).length
-      const badge=document.getElementById('unreadBadge')
-      if (unread>0){badge.textContent=unread+' baru';badge.classList.add('show')}else badge.classList.remove('show')
+      const unread = mails.filter(m=>!readSet.has(m.id)).length
+      const badge = document.getElementById('unreadBadge')
+      if (unread>0){badge.textContent=unread+' baru';badge.classList.add('show')}
+      else badge.classList.remove('show')
     }
   }
 }
 
 window.setFilter = (f,el) => {
-  filter=f; document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); renderMails()
+  filter=f
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  el.classList.add('active'); renderMails()
 }
 
 function subscribeMailbox() {
-  supabase.channel('mailbox-'+userId)
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mailbox',filter:`user_id=eq.${userId}`}, p=>{
+  supabase.channel('mailbox-sub-'+userId)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'mailbox',filter:`user_id=eq.${userId}`},p=>{
       mails.unshift(p.new); renderMails()
       if (Notification.permission==='granted') new Notification('📬 Surat Baru!',{body:p.new.title})
     }).subscribe()
-  Notification.requestPermission()
 }
 
 init()
