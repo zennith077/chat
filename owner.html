@@ -23,12 +23,11 @@
   .logout-btn{padding:8px 14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text-muted);font-size:12px;cursor:pointer;transition:.2s;}
   .logout-btn:hover{border-color:var(--danger);color:var(--danger);}
 
-  /* STATS BAR */
+  /* STATS */
   .stats-bar{display:flex;gap:12px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:9;overflow-x:auto;}
   .stats-bar::-webkit-scrollbar{display:none;}
   .stat-card{flex-shrink:0;padding:10px 18px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
   .stat-icon{font-size:20px;}
-  .stat-info{}
   .stat-value{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;}
   .stat-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
 
@@ -45,41 +44,39 @@
   .user-list{flex:1;overflow-y:auto;}
   .user-list::-webkit-scrollbar{width:3px;}
   .user-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-  .user-item{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border);position:relative;}
+  .user-item{padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border);}
   .user-item:hover{background:rgba(124,92,252,0.08);}
   .user-item.active{background:rgba(124,92,252,0.15);border-right:2px solid var(--accent);}
-  .user-avatar{width:38px;height:38px;border-radius:11px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;flex-shrink:0;position:relative;}
-  .vip-ring{box-shadow:0 0 0 2px #ffb547;}
-  .banned-ring{box-shadow:0 0 0 2px var(--danger);}
+  .user-avatar{width:38px;height:38px;border-radius:11px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;flex-shrink:0;}
+  .avatar-vip{box-shadow:0 0 0 2px #ffb547;}
+  .avatar-ban{box-shadow:0 0 0 2px var(--danger);}
   .user-info{flex:1;min-width:0;}
   .user-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px;}
-  .vip-tag{font-size:9px;background:linear-gradient(135deg,#ffb547,#ff8c00);color:#000;padding:1px 5px;border-radius:20px;font-weight:800;}
-  .ban-tag{font-size:9px;background:rgba(255,79,107,0.2);color:var(--danger);padding:1px 5px;border-radius:20px;font-weight:700;}
+  .tag-vip{font-size:9px;background:linear-gradient(135deg,#ffb547,#ff8c00);color:#000;padding:1px 5px;border-radius:20px;font-weight:800;}
+  .tag-ban{font-size:9px;background:rgba(255,79,107,0.2);color:var(--danger);padding:1px 5px;border-radius:20px;font-weight:700;}
   .user-preview{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
   .user-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
   .user-time{font-size:10px;color:var(--text-muted);}
   .unread-pill{background:var(--accent);color:#fff;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;}
   .sidebar-empty{padding:32px 16px;text-align:center;color:var(--text-muted);font-size:13px;}
 
-  /* CHAT PANEL */
+  /* CHAT */
   .chat-panel{flex:1;display:flex;flex-direction:column;min-width:0;}
   .chat-placeholder{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:var(--text-muted);}
-  .placeholder-icon{font-size:52px;}
-
   .chat-header{padding:12px 20px;background:rgba(13,13,28,0.97);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;}
   .chat-user-avatar{width:40px;height:40px;border-radius:12px;background:var(--user-bubble);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;}
   .chat-user-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
   .chat-user-id{font-size:10px;color:var(--text-muted);margin-top:2px;}
-  .header-actions{margin-left:auto;display:flex;gap:8px;}
+  .header-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
   .hdr-btn{padding:7px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid;transition:.2s;}
-  .hdr-ban{background:rgba(255,79,107,0.12);color:var(--danger);border-color:rgba(255,79,107,0.3);}
-  .hdr-ban:hover{background:var(--danger);color:#fff;}
-  .hdr-unban{background:rgba(0,201,125,0.12);color:var(--success);border-color:rgba(0,201,125,0.3);}
-  .hdr-unban:hover{background:var(--success);color:#fff;}
-  .hdr-vip{background:rgba(255,181,71,0.12);color:var(--warning);border-color:rgba(255,181,71,0.3);}
-  .hdr-vip:hover{background:var(--warning);color:#000;}
-  .hdr-clear{background:rgba(255,79,107,0.08);color:var(--danger);border-color:rgba(255,79,107,0.2);}
-  .hdr-clear:hover{background:var(--danger);color:#fff;}
+  .btn-ban{background:rgba(255,79,107,0.12);color:var(--danger);border-color:rgba(255,79,107,0.3);}
+  .btn-ban:hover{background:var(--danger);color:#fff;}
+  .btn-unban{background:rgba(0,201,125,0.12);color:var(--success);border-color:rgba(0,201,125,0.3);}
+  .btn-unban:hover{background:var(--success);color:#fff;}
+  .btn-vip{background:rgba(255,181,71,0.12);color:var(--warning);border-color:rgba(255,181,71,0.3);}
+  .btn-vip:hover{background:var(--warning);color:#000;}
+  .btn-clear{background:rgba(255,79,107,0.08);color:var(--danger);border-color:rgba(255,79,107,0.2);}
+  .btn-clear:hover{background:var(--danger);color:#fff;}
 
   .messages-area{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:10px;}
   .messages-area::-webkit-scrollbar{width:4px;}
@@ -93,6 +90,7 @@
   .typing-dots span:nth-child(3){animation-delay:.4s;}
   @keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
 
+  /* BUBBLES */
   .message{display:flex;flex-direction:column;max-width:70%;animation:msgIn .25s ease;}
   @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
   .message.user{align-self:flex-start;align-items:flex-start;}
@@ -101,7 +99,7 @@
   .message.user .bubble{background:var(--surface3);border:1px solid var(--border);border-bottom-left-radius:4px;}
   .message.owner .bubble{background:var(--user-bubble);border-bottom-right-radius:4px;box-shadow:0 4px 16px var(--accent-glow);}
   .bubble img{max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer;}
-  .msg-time{font-size:10px;color:var(--text-muted);margin-top:3px;padding:0 4px;display:flex;align-items:center;gap:5px;}
+  .msg-footer{font-size:10px;color:var(--text-muted);margin-top:3px;padding:0 4px;display:flex;align-items:center;gap:5px;}
   .msg-status{font-size:12px;}
   .msg-status.sent{color:var(--text-muted);}
   .msg-status.read{color:var(--accent2);}
@@ -109,7 +107,7 @@
   .date-sep{display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:11px;margin:4px 0;}
   .date-sep::before,.date-sep::after{content:'';flex:1;height:1px;background:var(--border);}
   .reply-quote{background:rgba(255,255,255,0.05);border-left:3px solid var(--accent);border-radius:8px;padding:5px 10px;margin-bottom:6px;font-size:12px;color:var(--text-muted);}
-  .reply-quote .rq-author{color:var(--accent);font-weight:600;margin-bottom:2px;}
+  .rq-author{color:var(--accent);font-weight:600;margin-bottom:2px;}
 
   /* MSG ACTIONS */
   .msg-actions{display:none;gap:4px;margin-top:4px;}
@@ -118,7 +116,7 @@
   .act-del{background:rgba(255,79,107,0.12);color:var(--danger);border:1px solid rgba(255,79,107,0.2);}
   .act-del:hover{background:var(--danger);color:#fff;}
 
-  /* REPLY AREA */
+  /* REPLY INPUT */
   .reply-area{padding:12px 16px 16px;background:rgba(13,13,28,0.97);border-top:1px solid var(--border);flex-shrink:0;}
   .reply-row{display:flex;gap:10px;align-items:flex-end;}
   .reply-input{flex:1;padding:12px 16px;border-radius:14px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;transition:.2s;max-height:120px;min-height:44px;}
@@ -131,7 +129,7 @@
   /* RIGHT PANEL */
   .right-panel{width:290px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
   .panel-tabs{display:flex;border-bottom:1px solid var(--border);}
-  .panel-tab{flex:1;padding:12px 6px;text-align:center;font-size:11px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:.2s;border-bottom:2px solid transparent;}
+  .panel-tab{flex:1;padding:12px 4px;text-align:center;font-size:11px;font-weight:600;cursor:pointer;color:var(--text-muted);transition:.2s;border-bottom:2px solid transparent;}
   .panel-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
   .panel-content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
   .panel-content::-webkit-scrollbar{width:3px;}
@@ -148,20 +146,16 @@
   .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
   .success-msg{padding:10px 14px;border-radius:10px;background:rgba(0,201,125,0.15);border:1px solid rgba(0,201,125,0.3);color:var(--success);font-size:13px;text-align:center;display:none;}
   .success-msg.show{display:block;}
-
-  /* BROADCAST */
-  .broadcast-section{border-top:1px solid var(--border);padding-top:12px;margin-top:4px;}
-  .broadcast-label{font-size:11px;color:var(--warning);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
   .broadcast-btn{padding:12px;border-radius:12px;background:rgba(255,181,71,0.15);border:1px solid rgba(255,181,71,0.3);color:var(--warning);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:.2s;width:100%;}
   .broadcast-btn:hover{background:var(--warning);color:#000;}
-
-  /* CMD CARDS */
-  .cmd-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;}
-  .cmd-name{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:14px;margin-bottom:6px;}
-  .cmd-resp{font-size:12px;color:var(--text-muted);line-height:1.5;}
+  .broadcast-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .warn-box{font-size:13px;color:var(--warning);background:rgba(255,181,71,0.1);border:1px solid rgba(255,181,71,0.2);border-radius:10px;padding:10px 14px;}
+  .cmd-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:4px;}
+  .cmd-card-name{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:14px;margin-bottom:6px;}
+  .cmd-card-resp{font-size:12px;color:var(--text-muted);line-height:1.5;}
 
   /* MODAL */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:.2s;}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:500;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:.2s;}
   .modal-overlay.open{opacity:1;pointer-events:all;}
   .modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;width:340px;display:flex;flex-direction:column;gap:16px;box-shadow:0 0 60px rgba(0,0,0,.5);transform:scale(.92);transition:.2s;}
   .modal-overlay.open .modal-box{transform:scale(1);}
@@ -182,7 +176,7 @@
   .lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;}
 
   /* TOAST */
-  .toast{position:fixed;bottom:20px;right:20px;background:var(--surface2);border:1px solid var(--border);padding:10px 18px;border-radius:14px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:.3s;}
+  .toast{position:fixed;bottom:20px;right:20px;background:var(--surface2);border:1px solid var(--border);padding:10px 18px;border-radius:14px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:.3s;white-space:nowrap;}
   .toast.show{opacity:1;}
 
   /* LOGIN */
@@ -194,12 +188,12 @@
   .login-btn{padding:12px;border-radius:12px;background:var(--user-bubble);border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:.2s;box-shadow:0 4px 20px var(--accent-glow);}
   .login-btn:hover{transform:translateY(-1px);}
   .login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:36px;text-align:center;background:linear-gradient(135deg,#7c5cfc,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .login-err{color:var(--danger);font-size:12px;text-align:center;display:none;}
+  .login-err{color:var(--danger);font-size:12px;text-align:center;min-height:16px;}
   .login-sub{text-align:center;color:var(--text-muted);font-size:13px;}
   .owner-warn{text-align:center;padding:8px 16px;border-radius:8px;background:rgba(255,79,107,.15);border:1px solid rgba(255,79,107,.3);color:var(--danger);font-size:12px;font-weight:600;}
 
   @media(max-width:900px){.right-panel{display:none;}}
-  @media(max-width:600px){.sidebar{width:220px;}.stats-bar{display:none;}}
+  @media(max-width:600px){.sidebar{width:200px;}.stats-bar{display:none;}}
 </style>
 </head>
 <body>
@@ -210,7 +204,7 @@
   <div class="login-card">
     <div class="login-title">🔐 Owner Login</div>
     <div class="owner-warn">⚠️ Akses Khusus Owner / Admin</div>
-    <div class="login-sub">Login dengan akun Owner untuk akses dashboard</div>
+    <div class="login-sub">Login dengan akun Owner</div>
     <input class="login-input" id="loginEmail" type="email" placeholder="Email Owner">
     <input class="login-input" id="loginPass" type="password" placeholder="Password">
     <div class="login-err" id="loginErr"></div>
@@ -227,43 +221,34 @@
   <button class="logout-btn" id="logoutBtn">Keluar</button>
 </div>
 
-<!-- STATS BAR -->
+<!-- STATS -->
 <div class="stats-bar">
-  <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value" id="statUsers">0</div><div class="stat-label">Total User</div></div></div>
-  <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-info"><div class="stat-value" id="statMsgs">0</div><div class="stat-label">Total Pesan</div></div></div>
-  <div class="stat-card"><div class="stat-icon">📬</div><div class="stat-info"><div class="stat-value" id="statMails">0</div><div class="stat-label">Mailbox Terkirim</div></div></div>
-  <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-info"><div class="stat-value" id="statVip">0</div><div class="stat-label">User VIP</div></div></div>
-  <div class="stat-card"><div class="stat-icon">🚫</div><div class="stat-info"><div class="stat-value" id="statBanned">0</div><div class="stat-label">User Banned</div></div></div>
+  <div class="stat-card"><div class="stat-icon">👥</div><div><div class="stat-value" id="statUsers">0</div><div class="stat-label">Total User</div></div></div>
+  <div class="stat-card"><div class="stat-icon">💬</div><div><div class="stat-value" id="statMsgs">0</div><div class="stat-label">Total Pesan</div></div></div>
+  <div class="stat-card"><div class="stat-icon">📬</div><div><div class="stat-value" id="statMails">0</div><div class="stat-label">Mailbox</div></div></div>
+  <div class="stat-card"><div class="stat-icon">⭐</div><div><div class="stat-value" id="statVip">0</div><div class="stat-label">VIP</div></div></div>
+  <div class="stat-card"><div class="stat-icon">🚫</div><div><div class="stat-value" id="statBanned">0</div><div class="stat-label">Banned</div></div></div>
 </div>
 
 <!-- LAYOUT -->
 <div class="layout">
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-header">Users <span class="user-count" id="userCount">0</span></div>
-    <div class="sidebar-search">
-      <input class="search-input" id="searchInput" placeholder="Cari user..." oninput="filterUsers()">
-    </div>
+    <div class="sidebar-search"><input class="search-input" id="searchInput" placeholder="Cari user..." oninput="filterUsers()"></div>
     <div class="user-list" id="userList"><div class="sidebar-empty">Menunggu user...</div></div>
   </div>
 
-  <!-- CHAT PANEL -->
   <div class="chat-panel">
     <div id="chatPlaceholder" class="chat-placeholder">
-      <div class="placeholder-icon">💬</div>
+      <div style="font-size:52px">💬</div>
       <div style="font-size:14px;color:var(--text-muted)">Pilih user untuk mulai chat</div>
     </div>
-
     <div id="chatHeader" class="chat-header" style="display:none">
       <div class="chat-user-avatar" id="chatAvatar">?</div>
-      <div>
-        <div class="chat-user-name" id="chatName">-</div>
-        <div class="chat-user-id" id="chatUid">-</div>
-      </div>
+      <div><div class="chat-user-name" id="chatName">-</div><div class="chat-user-id" id="chatUid">-</div></div>
       <div class="header-actions" id="headerActions"></div>
     </div>
-
     <div class="messages-area" id="messagesArea" style="display:none"></div>
     <div class="typing-bar" id="typingBar"><div class="typing-dots"><span></span><span></span><span></span></div> User sedang mengetik...</div>
     <div class="reply-area" id="replyArea" style="display:none">
@@ -274,47 +259,40 @@
     </div>
   </div>
 
-  <!-- RIGHT PANEL -->
   <div class="right-panel">
     <div class="panel-tabs">
       <div class="panel-tab active" onclick="switchTab('mailbox',this)">📨 Mailbox</div>
       <div class="panel-tab" onclick="switchTab('broadcast',this)">📢 Broadcast</div>
       <div class="panel-tab" onclick="switchTab('commands',this)">⚡ CMD</div>
     </div>
-
-    <!-- MAILBOX -->
     <div class="panel-content" id="tabMailbox">
-      <div class="form-group"><div class="form-label">Judul Surat</div><input class="form-input" id="mailTitle" placeholder="Subjek..."></div>
+      <div class="form-group"><div class="form-label">Judul</div><input class="form-input" id="mailTitle" placeholder="Subjek..."></div>
       <div class="form-group"><div class="form-label">Isi Pesan</div><textarea class="form-textarea" id="mailContent" placeholder="Tulis pesan..."></textarea></div>
       <div class="form-group"><div class="form-label">Link (opsional)</div><input class="form-input" id="mailLink" placeholder="https://..."></div>
-      <button class="submit-btn" id="sendMailBtn" onclick="sendMailbox()">📨 Kirim ke User</button>
+      <button class="submit-btn" onclick="sendMailbox()">📨 Kirim ke User</button>
       <div class="success-msg" id="mailSuccess">✅ Surat terkirim!</div>
     </div>
-
-    <!-- BROADCAST -->
     <div class="panel-content" id="tabBroadcast" style="display:none">
-      <div style="font-size:13px;color:var(--warning);background:rgba(255,181,71,0.1);border:1px solid rgba(255,181,71,0.2);border-radius:10px;padding:10px 14px;">⚠️ Broadcast akan dikirim ke SEMUA user yang terdaftar.</div>
-      <div class="form-group"><div class="form-label">Judul Broadcast</div><input class="form-input" id="bcTitle" placeholder="Judul pengumuman..."></div>
-      <div class="form-group"><div class="form-label">Isi Pesan</div><textarea class="form-textarea" id="bcContent" placeholder="Isi pengumuman untuk semua user..."></textarea></div>
+      <div class="warn-box">⚠️ Broadcast dikirim ke SEMUA user terdaftar.</div>
+      <div class="form-group"><div class="form-label">Judul</div><input class="form-input" id="bcTitle" placeholder="Judul pengumuman..."></div>
+      <div class="form-group"><div class="form-label">Isi Pesan</div><textarea class="form-textarea" id="bcContent" placeholder="Isi pengumuman..."></textarea></div>
       <div class="form-group"><div class="form-label">Link (opsional)</div><input class="form-input" id="bcLink" placeholder="https://..."></div>
       <button class="broadcast-btn" id="bcBtn" onclick="sendBroadcast()">📢 Kirim ke Semua User</button>
       <div class="success-msg" id="bcSuccess">✅ Broadcast terkirim!</div>
     </div>
-
-    <!-- COMMANDS -->
     <div class="panel-content" id="tabCommands" style="display:none">
-      <div id="cmdList"></div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div class="form-group" style="margin-bottom:10px"><div class="form-label">Nama Command</div><input class="form-input" id="newCmdName" placeholder="pay, done, reff..."></div>
-        <div class="form-group" style="margin-bottom:10px"><div class="form-label">Respons</div><textarea class="form-textarea" id="newCmdResp" placeholder="Pesan balasan..." style="min-height:70px"></textarea></div>
+      <div id="cmdCardList"></div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:10px;">
+        <div class="form-group"><div class="form-label">Nama Command</div><input class="form-input" id="newCmdName" placeholder="pay, done, reff..."></div>
+        <div class="form-group"><div class="form-label">Respons</div><textarea class="form-textarea" id="newCmdResp" placeholder="Pesan balasan..." style="min-height:70px"></textarea></div>
         <button class="submit-btn" onclick="addCommand()">➕ Tambah Command</button>
-        <div class="success-msg" id="cmdSuccess" style="margin-top:10px">✅ Command ditambahkan!</div>
+        <div class="success-msg" id="cmdSuccess">✅ Command ditambahkan!</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal-box">
     <div class="modal-icon" id="modalIcon">⚠️</div>
@@ -333,20 +311,26 @@
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
+// ── GANTI INI ─────────────────────────────────────────────────
 const SUPABASE_URL = "https://hlayyekwhahgdftvodbh.supabase.co"
 const SUPABASE_KEY = "sb_publishable_7BIpp44f-1f0GWcftvS8Lg_CCXPHYG7"
+// ─────────────────────────────────────────────────────────────
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 let ownerId = null, activeUid = null
 let users = {}, profiles = {}
-let msgChannel = null, allMsgChannel = null
+let msgChannel = null, allMsgChannel = null, typingAllChannel = null
 let searchQ = '', pendingAction = null
-let typingTimeout = null
-let typingSent = false
+let typingTimeout = null, typingSent = false
 
 const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-const fmtTime = ts => { const d=new Date(ts),n=new Date(); return d.toDateString()===n.toDateString()?d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('id-ID',{day:'numeric',month:'short'}) }
+const fmtTime = ts => {
+  const d=new Date(ts), n=new Date()
+  return d.toDateString()===n.toDateString()
+    ? d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})
+    : d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})
+}
 const scrollBottom = () => { const a=document.getElementById('messagesArea'); a.scrollTop=a.scrollHeight }
 const autoResize = el => { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px' }
 
@@ -355,58 +339,66 @@ function showToast(msg) {
   setTimeout(()=>t.classList.remove('show'),2500)
 }
 function showSuccess(id) {
-  const el=document.getElementById(id); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),3000)
+  const el=document.getElementById(id); el.classList.add('show')
+  setTimeout(()=>el.classList.remove('show'),3000)
 }
 
 // ── MODAL ──────────────────────────────────────────────────────
-function openModal({icon,title,desc,confirmLabel,safe,onConfirm}) {
-  document.getElementById('modalIcon').textContent=icon||'⚠️'
-  document.getElementById('modalTitle').textContent=title
-  document.getElementById('modalDesc').textContent=desc
-  const btn=document.getElementById('modalConfirmBtn')
-  btn.textContent=confirmLabel||'Konfirmasi'
-  btn.className='modal-confirm'+(safe?' safe':'')
-  pendingAction=onConfirm
+function openModal({icon,title,desc,label,safe,onConfirm}) {
+  document.getElementById('modalIcon').textContent = icon||'⚠️'
+  document.getElementById('modalTitle').textContent = title
+  document.getElementById('modalDesc').textContent = desc
+  const btn = document.getElementById('modalConfirmBtn')
+  btn.textContent = label||'Konfirmasi'
+  btn.className = 'modal-confirm'+(safe?' safe':'')
+  pendingAction = onConfirm
   document.getElementById('confirmModal').classList.add('open')
 }
 window.closeModal = () => { document.getElementById('confirmModal').classList.remove('open'); pendingAction=null }
 document.getElementById('modalConfirmBtn').onclick = async () => { if(pendingAction) await pendingAction(); closeModal() }
-document.getElementById('confirmModal').addEventListener('click', e => { if(e.target===document.getElementById('confirmModal')) closeModal() })
+document.getElementById('confirmModal').addEventListener('click', e => { if(e.target.id==='confirmModal') closeModal() })
 
 // ── AUTH ───────────────────────────────────────────────────────
 async function init() {
   const {data:{session}} = await supabase.auth.getSession()
   if (session) {
     ownerId = session.user.id
-    // Role guard: cek apakah user ini adalah owner
-    const {data:prof} = await supabase.from('profiles').select('role').eq('id',ownerId).maybeSingle()
-    if (prof && prof.role !== 'owner') {
-      document.getElementById('loginOverlay').style.display='flex'
-      document.getElementById('loginErr').textContent='Akun ini bukan Owner.'
-      document.getElementById('loginErr').style.display='block'
-      await supabase.auth.signOut(); return
-    }
-    document.getElementById('loginOverlay').style.display='none'
+    const ok = await checkOwnerRole(ownerId)
+    if (!ok) return
+    document.getElementById('loginOverlay').style.display = 'none'
     startApp()
   }
 }
 
-document.getElementById('loginBtn').onclick = async () => {
-  const email=document.getElementById('loginEmail').value.trim()
-  const pass=document.getElementById('loginPass').value
-  const err=document.getElementById('loginErr'); err.style.display='none'
-  if (!email||!pass){err.textContent='Isi semua field';err.style.display='block';return}
-  const {data,error}=await supabase.auth.signInWithPassword({email,password:pass})
-  if (error){err.textContent=error.message;err.style.display='block';return}
-  // Cek role
-  const {data:prof}=await supabase.from('profiles').select('role').eq('id',data.user.id).maybeSingle()
-  if (!prof || prof.role !== 'owner') {
-    err.textContent='Akun ini bukan Owner. Akses ditolak.'
-    err.style.display='block'
-    await supabase.auth.signOut(); return
+async function checkOwnerRole(uid) {
+  try {
+    const {data} = await supabase.from('profiles').select('role').eq('id',uid).maybeSingle()
+    if (!data || data.role !== 'owner') {
+      document.getElementById('loginErr').textContent = 'Akun ini bukan Owner. Akses ditolak.'
+      await supabase.auth.signOut()
+      return false
+    }
+    return true
+  } catch(e) {
+    document.getElementById('loginErr').textContent = 'Gagal verifikasi role.'
+    return false
   }
-  ownerId=data.user.id
-  document.getElementById('loginOverlay').style.display='none'
+}
+
+document.getElementById('loginBtn').onclick = async () => {
+  const email = document.getElementById('loginEmail').value.trim()
+  const pass  = document.getElementById('loginPass').value
+  const err   = document.getElementById('loginErr'); err.textContent=''
+  if (!email||!pass) { err.textContent='Isi semua field'; return }
+
+  const {data, error} = await supabase.auth.signInWithPassword({email, password:pass})
+  if (error) { err.textContent = error.message; return }
+
+  ownerId = data.user.id
+  const ok = await checkOwnerRole(ownerId)
+  if (!ok) return
+
+  document.getElementById('loginOverlay').style.display = 'none'
   startApp()
 }
 
@@ -415,8 +407,8 @@ document.getElementById('logoutBtn').onclick = async () => { await supabase.auth
 // ── START ──────────────────────────────────────────────────────
 async function startApp() {
   await loadStats()
-  await loadAllMessages()
   await loadProfiles()
+  await loadAllMessages()
   subscribeAllMessages()
   subscribeTypingAll()
   await loadCommands()
@@ -425,8 +417,8 @@ async function startApp() {
 // ── STATS ──────────────────────────────────────────────────────
 async function loadStats() {
   const [msgs, mails, profs] = await Promise.all([
-    supabase.from('messages').select('id',{count:'exact',head:true}),
-    supabase.from('mailbox').select('id',{count:'exact',head:true}),
+    supabase.from('messages').select('*',{count:'exact',head:true}),
+    supabase.from('mailbox').select('*',{count:'exact',head:true}),
     supabase.from('profiles').select('id,vip,banned')
   ])
   document.getElementById('statMsgs').textContent = msgs.count||0
@@ -436,51 +428,52 @@ async function loadStats() {
   document.getElementById('statBanned').textContent = p.filter(x=>x.banned).length
 }
 
-// ── LOAD PROFILES ──────────────────────────────────────────────
 async function loadProfiles() {
   const {data} = await supabase.from('profiles').select('*')
-  ;(data||[]).forEach(p => { profiles[p.id]=p })
-  document.getElementById('statUsers').textContent = Object.keys(users).length
-  renderUserList()
+  ;(data||[]).forEach(p=>{ profiles[p.id]=p })
 }
 
-// ── LOAD ALL MESSAGES ──────────────────────────────────────────
 async function loadAllMessages() {
   const {data} = await supabase.from('messages').select('*').order('created_at',{ascending:false})
-  ;(data||[]).forEach(m => trackUser(m))
+  ;(data||[]).forEach(m=>trackUser(m))
+  document.getElementById('statUsers').textContent = Object.keys(users).length
+  document.getElementById('userCount').textContent = Object.keys(users).length
   renderUserList()
 }
 
 function trackUser(m) {
   if (!users[m.user_id]) {
-    users[m.user_id]={uid:m.user_id,name:'User '+m.user_id.substring(0,8),lastMsg:m.content||'[Gambar]',lastTime:m.created_at,unread:0}
+    users[m.user_id] = {uid:m.user_id, name:'User '+m.user_id.substring(0,8), lastMsg:m.content||'[Gambar]', lastTime:m.created_at, unread:0}
   } else {
-    const u=users[m.user_id]
-    if (new Date(m.created_at)>new Date(u.lastTime)){u.lastMsg=m.content||'[Gambar]';u.lastTime=m.created_at}
+    const u = users[m.user_id]
+    if (new Date(m.created_at)>new Date(u.lastTime)) { u.lastMsg=m.content||'[Gambar]'; u.lastTime=m.created_at }
   }
-  if (m.sender==='user'&&m.user_id!==activeUid) users[m.user_id].unread=(users[m.user_id].unread||0)+1
+  if (m.sender==='user' && m.user_id!==activeUid) users[m.user_id].unread=(users[m.user_id].unread||0)+1
 }
 
-// ── RENDER USER LIST ───────────────────────────────────────────
 function renderUserList() {
-  const list=document.getElementById('userList')
-  const arr=Object.values(users).filter(u=>!searchQ||u.name.toLowerCase().includes(searchQ)||u.uid.includes(searchQ)).sort((a,b)=>new Date(b.lastTime)-new Date(a.lastTime))
-  document.getElementById('userCount').textContent=arr.length
-  document.getElementById('statUsers').textContent=arr.length
-  if (!arr.length){list.innerHTML='<div class="sidebar-empty">Belum ada user</div>';return}
+  const list = document.getElementById('userList')
+  const arr = Object.values(users)
+    .filter(u=>!searchQ||u.name.toLowerCase().includes(searchQ)||u.uid.includes(searchQ))
+    .sort((a,b)=>new Date(b.lastTime)-new Date(a.lastTime))
+
+  document.getElementById('userCount').textContent = arr.length
+  document.getElementById('statUsers').textContent = arr.length
+
+  if (!arr.length) { list.innerHTML='<div class="sidebar-empty">Belum ada user</div>'; return }
   list.innerHTML=''
   arr.forEach(u=>{
-    const prof=profiles[u.uid]||{}
-    const div=document.createElement('div')
-    div.className='user-item'+(u.uid===activeUid?' active':'')
-    div.onclick=()=>openChat(u.uid)
-    const avatarClass=prof.vip?'user-avatar vip-ring':prof.banned?'user-avatar banned-ring':'user-avatar'
-    div.innerHTML=`
-      <div class="${avatarClass}">${u.name[0].toUpperCase()}</div>
+    const p = profiles[u.uid]||{}
+    const div = document.createElement('div')
+    div.className = 'user-item'+(u.uid===activeUid?' active':'')
+    div.onclick = ()=>openChat(u.uid)
+    const aClass = p.vip?'user-avatar avatar-vip':p.banned?'user-avatar avatar-ban':'user-avatar'
+    div.innerHTML = `
+      <div class="${aClass}">${u.name[0].toUpperCase()}</div>
       <div class="user-info">
         <div class="user-name">${esc(u.name)}
-          ${prof.vip?'<span class="vip-tag">VIP</span>':''}
-          ${prof.banned?'<span class="ban-tag">BAN</span>':''}
+          ${p.vip?'<span class="tag-vip">VIP</span>':''}
+          ${p.banned?'<span class="tag-ban">BAN</span>':''}
         </div>
         <div class="user-preview">${esc(u.lastMsg)}</div>
       </div>
@@ -496,127 +489,129 @@ window.filterUsers = () => { searchQ=document.getElementById('searchInput').valu
 
 // ── OPEN CHAT ──────────────────────────────────────────────────
 async function openChat(uid) {
-  activeUid=uid; if (users[uid]) users[uid].unread=0; renderUserList()
-  document.getElementById('chatPlaceholder').style.display='none'
-  document.getElementById('chatHeader').style.display='flex'
-  document.getElementById('messagesArea').style.display='flex'
-  document.getElementById('replyArea').style.display='block'
-  document.getElementById('chatAvatar').textContent=(users[uid]?.name||'U')[0].toUpperCase()
-  document.getElementById('chatName').textContent=users[uid]?.name||uid
-  document.getElementById('chatUid').textContent='ID: '+uid
+  activeUid = uid
+  if (users[uid]) users[uid].unread = 0
+  renderUserList()
+
+  document.getElementById('chatPlaceholder').style.display = 'none'
+  document.getElementById('chatHeader').style.display = 'flex'
+  document.getElementById('messagesArea').style.display = 'flex'
+  document.getElementById('replyArea').style.display = 'block'
+  document.getElementById('chatAvatar').textContent = (users[uid]?.name||'U')[0].toUpperCase()
+  document.getElementById('chatName').textContent = users[uid]?.name||uid
+  document.getElementById('chatUid').textContent = 'ID: '+uid.substring(0,18)+'...'
   renderHeaderActions(uid)
   await loadChat(uid)
+
   if (msgChannel) await supabase.removeChannel(msgChannel)
-  msgChannel=supabase.channel('owner-chat-'+uid)
+  msgChannel = supabase.channel('owner-chat-'+uid)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:`user_id=eq.${uid}`},p=>{
-      if (!document.getElementById('msg-'+p.new.id)){renderMessage(p.new);scrollBottom()}
+      if (!document.getElementById('msg-'+p.new.id)) { renderMessage(p.new); scrollBottom() }
     })
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'messages',filter:`user_id=eq.${uid}`},p=>{
       const st=document.getElementById('st-'+p.new.id)
-      if (st){st.className='msg-status '+(p.new.status==='read'?'read':'sent');st.textContent=p.new.status==='read'?'✓✓':'✓'}
+      if (st) { st.className='msg-status '+(p.new.status==='read'?'read':'sent'); st.textContent=p.new.status==='read'?'✓✓':'✓' }
     })
     .subscribe()
-  // Mark as read
+
+  // Mark user messages as read
   await supabase.from('messages').update({status:'read'}).eq('user_id',uid).eq('sender','user').neq('status','read')
 }
 
 function renderHeaderActions(uid) {
-  const prof=profiles[uid]||{}
-  const div=document.getElementById('headerActions')
-  div.innerHTML=`
-    ${prof.banned
-      ?`<button class="hdr-btn hdr-unban" onclick="toggleBan('${uid}',false)">✅ Unban</button>`
-      :`<button class="hdr-btn hdr-ban" onclick="toggleBan('${uid}',true)">🚫 Ban</button>`
-    }
-    ${prof.vip
-      ?`<button class="hdr-btn hdr-vip" onclick="toggleVip('${uid}',false)">⭐ Lepas VIP</button>`
-      :`<button class="hdr-btn hdr-vip" onclick="toggleVip('${uid}',true)">⭐ Set VIP</button>`
-    }
-    <button class="hdr-btn hdr-clear" onclick="confirmClearChat()">🗑️ Hapus Chat</button>`
+  const p = profiles[uid]||{}
+  document.getElementById('headerActions').innerHTML = `
+    ${p.banned
+      ? `<button class="hdr-btn btn-unban" onclick="toggleBan('${uid}',false)">✅ Unban</button>`
+      : `<button class="hdr-btn btn-ban" onclick="toggleBan('${uid}',true)">🚫 Ban</button>`}
+    ${p.vip
+      ? `<button class="hdr-btn btn-vip" onclick="toggleVip('${uid}',false)">⭐ Lepas VIP</button>`
+      : `<button class="hdr-btn btn-vip" onclick="toggleVip('${uid}',true)">⭐ Set VIP</button>`}
+    <button class="hdr-btn btn-clear" onclick="confirmClear()">🗑️ Hapus Chat</button>`
 }
 
 async function loadChat(uid) {
-  const {data}=await supabase.from('messages').select('*').eq('user_id',uid).order('created_at',{ascending:true})
-  const area=document.getElementById('messagesArea'); area.innerHTML='<div class="date-sep">Riwayat Chat</div>'
+  const {data} = await supabase.from('messages').select('*').eq('user_id',uid).order('created_at',{ascending:true})
+  const area = document.getElementById('messagesArea')
+  area.innerHTML = '<div class="date-sep">Riwayat Chat</div>'
   ;(data||[]).forEach(m=>renderMessage(m)); scrollBottom()
 }
 
 function renderMessage(msg) {
-  const area=document.getElementById('messagesArea')
-  const ex=document.getElementById('msg-'+msg.id); if (ex) return
-  const div=document.createElement('div')
-  div.className='message '+(msg.sender==='owner'?'owner':'user')
-  div.id='msg-'+msg.id
-  let h=`<div class="sender-label">${msg.sender==='owner'?'Owner (kamu)':'User'}</div>`
+  if (document.getElementById('msg-'+msg.id)) return
+  const area = document.getElementById('messagesArea')
+  const div = document.createElement('div')
+  div.className = 'message '+(msg.sender==='owner'?'owner':'user')
+  div.id = 'msg-'+msg.id
+  let h = `<div class="sender-label">${msg.sender==='owner'?'Owner (kamu)':'User'}</div>`
   if (msg.reply_to_content) h+=`<div class="reply-quote"><div class="rq-author">${msg.reply_to_sender==='owner'?'Owner':'User'}</div><div>${esc(msg.reply_to_content)}</div></div>`
-  h+=`<div class="bubble">`
-  if (msg.image_url) h+=`<img src="${msg.image_url}" onclick="openLb('${msg.image_url}')" loading="lazy">`
+  h += `<div class="bubble">`
+  if (msg.image_url) h+=`<img src="${esc(msg.image_url)}" onclick="openLb('${esc(msg.image_url)}')" loading="lazy">`
   if (msg.content) h+=esc(msg.content)
-  h+=`</div>`
-  h+=`<div class="msg-time">${fmtTime(msg.created_at)}`
-  if (msg.sender==='owner'){
-    const s=msg.status==='read'?'read':'sent'
-    h+=` <span class="msg-status ${s}" id="st-${msg.id}">${msg.status==='read'?'✓✓':'✓'}</span>`
+  h += `</div>`
+  h += `<div class="msg-footer">${fmtTime(msg.created_at)}`
+  if (msg.sender==='owner') {
+    const cls = msg.status==='read'?'read':'sent'
+    h += ` <span class="msg-status ${cls}" id="st-${msg.id}">${msg.status==='read'?'✓✓':'✓'}</span>`
   }
-  h+=`</div>`
-  h+=`<div class="msg-actions"><button class="act-btn act-del" onclick="confirmDelMsg('${msg.id}')">🗑 Hapus</button></div>`
-  div.innerHTML=h; area.appendChild(div)
+  h += `</div>`
+  h += `<div class="msg-actions"><button class="act-btn act-del" onclick="confirmDelMsg('${msg.id}')">🗑 Hapus</button></div>`
+  div.innerHTML = h; area.appendChild(div)
 }
 
-// ── SUBSCRIBE ALL ──────────────────────────────────────────────
+// ── SUBSCRIBE ──────────────────────────────────────────────────
 function subscribeAllMessages() {
-  allMsgChannel=supabase.channel('owner-all')
+  allMsgChannel = supabase.channel('owner-all-msgs')
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},p=>{
-      const m=p.new
+      const m = p.new
       if (!users[m.user_id]) users[m.user_id]={uid:m.user_id,name:'User '+m.user_id.substring(0,8),lastMsg:m.content||'[Gambar]',lastTime:m.created_at,unread:0}
-      const u=users[m.user_id]; u.lastMsg=m.content||'[Gambar]'; u.lastTime=m.created_at
-      if (m.sender==='user'&&m.user_id!==activeUid){
+      const u = users[m.user_id]; u.lastMsg=m.content||'[Gambar]'; u.lastTime=m.created_at
+      if (m.sender==='user'&&m.user_id!==activeUid) {
         u.unread=(u.unread||0)+1
         showToast('📨 Pesan baru dari '+u.name)
         if (Notification.permission==='granted') new Notification(u.name,{body:m.content||'[Gambar]'})
       }
       renderUserList()
-      // Update stats
-      const cur=parseInt(document.getElementById('statMsgs').textContent)||0
-      document.getElementById('statMsgs').textContent=cur+1
+      const cur = parseInt(document.getElementById('statMsgs').textContent)||0
+      document.getElementById('statMsgs').textContent = cur+1
     }).subscribe()
   Notification.requestPermission()
 }
 
 function subscribeTypingAll() {
-  // Listen for typing from active user
-  supabase.channel('typing-all-owner').on('broadcast',{event:'typing'},p=>{
-    if (p.payload?.sender==='user'&&p.payload?.userId===activeUid){
-      document.getElementById('typingBar').classList.add('show')
-      clearTimeout(typingTimeout)
-      typingTimeout=setTimeout(()=>document.getElementById('typingBar').classList.remove('show'),3000)
-    }
-  }).subscribe()
+  typingAllChannel = supabase.channel('typing-all-watch')
+    .on('broadcast',{event:'typing'},p=>{
+      if (p.payload?.from==='user' && p.payload?.userId===activeUid) {
+        document.getElementById('typingBar').classList.add('show')
+        clearTimeout(typingTimeout)
+        typingTimeout = setTimeout(()=>document.getElementById('typingBar').classList.remove('show'),3000)
+      }
+    }).subscribe()
 }
 
 // ── SEND REPLY ─────────────────────────────────────────────────
 window.sendReply = async () => {
   if (!activeUid) return
-  const input=document.getElementById('replyInput'), text=input.value.trim()
-  if (!text) return
-  document.getElementById('replyBtn').disabled=true
-  await supabase.from('messages').insert({user_id:activeUid,sender:'owner',content:text,status:'sent',edited:false})
-  // Send typing broadcast
-  if (!typingSent){
-    typingSent=true
-    await supabase.channel('typing-'+activeUid).send({type:'broadcast',event:'typing',payload:{sender:'owner'}})
-    setTimeout(()=>typingSent=false,2000)
+  const input = document.getElementById('replyInput')
+  const text = input.value.trim(); if (!text) return
+  document.getElementById('replyBtn').disabled = true
+  const {error} = await supabase.from('messages').insert({user_id:activeUid, sender:'owner', content:text, status:'sent', edited:false})
+  if (error) showToast('Gagal: '+error.message)
+  // Broadcast typing ke user
+  if (!typingSent) {
+    typingSent = true
+    await supabase.channel('typing-room-'+activeUid).send({type:'broadcast',event:'typing',payload:{from:'owner'}})
+    setTimeout(()=>typingSent=false, 2000)
   }
   input.value=''; input.style.height='auto'
-  document.getElementById('replyBtn').disabled=false
+  document.getElementById('replyBtn').disabled = false
 }
 document.getElementById('replyInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply()}})
 document.getElementById('replyInput').addEventListener('input',e=>{
   autoResize(e.target)
-  // Broadcast typing
-  if (!typingSent&&activeUid){
+  if (!typingSent && activeUid) {
     typingSent=true
-    supabase.channel('typing-'+activeUid).send({type:'broadcast',event:'typing',payload:{sender:'owner'}})
+    supabase.channel('typing-room-'+activeUid).send({type:'broadcast',event:'typing',payload:{from:'owner'}})
     setTimeout(()=>typingSent=false,2000)
   }
 })
@@ -624,54 +619,46 @@ document.getElementById('replyInput').addEventListener('input',e=>{
 // ── BAN / VIP ──────────────────────────────────────────────────
 window.toggleBan = (uid, ban) => {
   openModal({
-    icon: ban?'🚫':'✅',
+    icon: ban?'🚫':'✅', label: ban?'Ban':'Unban', safe: !ban,
     title: ban?'Ban User':'Unban User',
-    desc: ban?'User tidak bisa lagi mengakses chat & mailbox.':'User bisa kembali mengakses platform.',
-    confirmLabel: ban?'Ban':'Unban',
-    safe: !ban,
+    desc: ban?'User tidak bisa akses chat & mailbox.':'User bisa kembali mengakses platform.',
     onConfirm: async () => {
-      await supabase.from('profiles').upsert({id:uid,banned:ban},{onConflict:'id'})
+      await supabase.from('profiles').upsert({id:uid, banned:ban},{onConflict:'id'})
       if (!profiles[uid]) profiles[uid]={}; profiles[uid].banned=ban
-      renderHeaderActions(uid); renderUserList()
+      renderHeaderActions(uid); renderUserList(); loadStats()
       showToast(ban?'🚫 User dibanned':'✅ User di-unban')
-      // Update stats
-      loadStats()
     }
   })
 }
 
 window.toggleVip = (uid, vip) => {
   openModal({
-    icon:'⭐',
+    icon:'⭐', label: vip?'Set VIP':'Lepas VIP', safe:true,
     title: vip?'Set VIP':'Lepas VIP',
-    desc: vip?'User akan mendapat status VIP.':'Status VIP user akan dicabut.',
-    confirmLabel: vip?'Set VIP':'Lepas VIP',
-    safe: true,
+    desc: vip?'User mendapat status VIP.':'Status VIP dicabut.',
     onConfirm: async () => {
-      await supabase.from('profiles').upsert({id:uid,vip},{onConflict:'id'})
+      await supabase.from('profiles').upsert({id:uid, vip},{onConflict:'id'})
       if (!profiles[uid]) profiles[uid]={}; profiles[uid].vip=vip
-      renderHeaderActions(uid); renderUserList()
+      renderHeaderActions(uid); renderUserList(); loadStats()
       showToast(vip?'⭐ VIP diberikan':'VIP dicabut')
-      loadStats()
     }
   })
 }
 
-// ── DELETE MSG ─────────────────────────────────────────────────
+// ── DELETE ─────────────────────────────────────────────────────
 window.confirmDelMsg = id => {
-  openModal({icon:'🗑️',title:'Hapus Pesan',desc:'Pesan dihapus permanen dari database.',confirmLabel:'Hapus',
+  openModal({icon:'🗑️',title:'Hapus Pesan',desc:'Pesan dihapus permanen.',label:'Hapus',
     onConfirm: async () => {
       await supabase.from('messages').delete().eq('id',id)
       const el=document.getElementById('msg-'+id)
       if (el){el.style.opacity='0';el.style.transition='.2s';setTimeout(()=>el.remove(),200)}
-      showToast('✅ Pesan dihapus')
     }
   })
 }
 
-window.confirmClearChat = () => {
+window.confirmClear = () => {
   if (!activeUid) return
-  openModal({icon:'⚠️',title:'Hapus Semua Chat',desc:`Semua pesan user ini akan dihapus permanen.`,confirmLabel:'Hapus Semua',
+  openModal({icon:'⚠️',title:'Hapus Semua Chat',desc:'Semua pesan user ini dihapus permanen.',label:'Hapus Semua',
     onConfirm: async () => {
       await supabase.from('messages').delete().eq('user_id',activeUid)
       document.getElementById('messagesArea').innerHTML='<div class="date-sep">Chat telah dihapus</div>'
@@ -682,15 +669,15 @@ window.confirmClearChat = () => {
 
 // ── MAILBOX ────────────────────────────────────────────────────
 window.sendMailbox = async () => {
-  if (!activeUid){showToast('Pilih user terlebih dahulu');return}
+  if (!activeUid) { showToast('Pilih user terlebih dahulu'); return }
   const title=document.getElementById('mailTitle').value.trim()
   const content=document.getElementById('mailContent').value.trim()
   const link=document.getElementById('mailLink').value.trim()
-  if (!title||!content){showToast('Isi judul dan pesan');return}
-  const btn=document.getElementById('sendMailBtn'); btn.disabled=true
+  if (!title||!content) { showToast('Isi judul dan pesan'); return }
+  const btn=document.querySelector('#tabMailbox .submit-btn'); btn.disabled=true
   const {error}=await supabase.from('mailbox').insert({user_id:activeUid,title,content,link:link||null})
   btn.disabled=false
-  if (error){showToast('Gagal: '+error.message);return}
+  if (error) { showToast('Gagal: '+error.message); return }
   document.getElementById('mailTitle').value=''
   document.getElementById('mailContent').value=''
   document.getElementById('mailLink').value=''
@@ -704,26 +691,22 @@ window.sendBroadcast = async () => {
   const title=document.getElementById('bcTitle').value.trim()
   const content=document.getElementById('bcContent').value.trim()
   const link=document.getElementById('bcLink').value.trim()
-  if (!title||!content){showToast('Isi judul dan pesan broadcast');return}
-  const uids=Object.keys(users)
-  if (!uids.length){showToast('Belum ada user');return}
+  if (!title||!content) { showToast('Isi judul dan pesan'); return }
+  const uids = Object.keys(users)
+  if (!uids.length) { showToast('Belum ada user'); return }
   openModal({
-    icon:'📢', title:'Kirim Broadcast',
+    icon:'📢', title:'Kirim Broadcast', safe:true, label:'Kirim Sekarang',
     desc:`Pesan akan dikirim ke ${uids.length} user. Lanjutkan?`,
-    confirmLabel:'Kirim Sekarang', safe:true,
     onConfirm: async () => {
       const btn=document.getElementById('bcBtn'); btn.disabled=true; btn.textContent='Mengirim...'
-      const rows=uids.map(uid=>({user_id:uid,title,content,link:link||null}))
-      // Insert in batches of 50
-      for (let i=0;i<rows.length;i+=50){
-        await supabase.from('mailbox').insert(rows.slice(i,i+50))
-      }
+      const rows = uids.map(uid=>({user_id:uid,title,content,link:link||null}))
+      for (let i=0;i<rows.length;i+=50) await supabase.from('mailbox').insert(rows.slice(i,i+50))
       btn.disabled=false; btn.textContent='📢 Kirim ke Semua User'
       document.getElementById('bcTitle').value=''
       document.getElementById('bcContent').value=''
       document.getElementById('bcLink').value=''
       showSuccess('bcSuccess')
-      showToast(`✅ Broadcast terkirim ke ${uids.length} user`)
+      showToast(`✅ Terkirim ke ${uids.length} user`)
     }
   })
 }
@@ -731,10 +714,10 @@ window.sendBroadcast = async () => {
 // ── COMMANDS ───────────────────────────────────────────────────
 async function loadCommands() {
   const {data}=await supabase.from('commands').select('*')
-  const list=document.getElementById('cmdList'); list.innerHTML=''
+  const list=document.getElementById('cmdCardList'); list.innerHTML=''
   ;(data||[]).forEach(c=>{
     const div=document.createElement('div'); div.className='cmd-card'
-    div.innerHTML=`<div class="cmd-name">/${esc(c.command)}</div><div class="cmd-resp">${esc(c.response)}</div>`
+    div.innerHTML=`<div class="cmd-card-name">/${esc(c.command)}</div><div class="cmd-card-resp">${esc(c.response)}</div>`
     list.appendChild(div)
   })
 }
@@ -742,9 +725,9 @@ async function loadCommands() {
 window.addCommand = async () => {
   const name=document.getElementById('newCmdName').value.trim()
   const resp=document.getElementById('newCmdResp').value.trim()
-  if (!name||!resp){showToast('Isi nama dan respons');return}
+  if (!name||!resp) { showToast('Isi nama dan respons'); return }
   const {error}=await supabase.from('commands').upsert({command:name,response:resp},{onConflict:'command'})
-  if (error){showToast('Gagal: '+error.message);return}
+  if (error) { showToast('Gagal: '+error.message); return }
   document.getElementById('newCmdName').value=''
   document.getElementById('newCmdResp').value=''
   showSuccess('cmdSuccess'); loadCommands()
